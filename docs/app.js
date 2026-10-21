@@ -1,0 +1,181 @@
+'use strict';
+(() => {
+  const main = document.querySelector('#main');
+  const dialog = document.querySelector('#info-dialog');
+  const initialNote = 'I remember what happened. The Party should not own my thoughts.';
+  const approvedNote = 'Something feels wrong.';
+  const originalMessage = 'The news is bad. The Party calls it excellent.';
+  let state = Telescreen.initialState(), view = 'landing', ui = {}, previousScene = null, previousUI = {}, keptNote = null, opener = null;
+  const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const signed = n => n > 0 ? '+' + n : String(n);
+  const marks = {
+    eye:'<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>',
+    book:'<path d="M12 5C8 2 3 4 3 4v15s5-2 9 1c4-3 9-1 9-1V4s-5-2-9 1Zm0 0v15"/>',
+    lock:'<rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>',
+    diary:'<rect x="5" y="3" width="15" height="18" rx="3"/><path d="M9 8h7M9 12h7M9 16h4M3 8h4M3 15h4"/>',
+    fitness:'<path d="m5 5 14 14M3 7l4-4M2 9l7-7M15 22l7-7M17 20l3-3"/>',
+    hate:'<rect x="2" y="5" width="15" height="15" rx="4"/><path d="m17 10 5-3v11l-5-3M7 1l3 4 3-4"/>',
+    records:'<path d="M5 3h10l4 4v14H5Zm10 0v5h4M8 12h8M8 16h6"/>',
+    ration:'<path d="M7 5a5 5 0 0 1 10 0c0 5 4 5 4 12H3c0-7 4-7 4-12Zm3 15h4"/>',
+    keyboard:'<rect x="2" y="6" width="20" height="13" rx="3"/><path d="M6 10h.1M10 10h.1M14 10h.1M18 10h.1M6 13h.1M10 13h.1M14 13h.1M18 13h.1M7 16h10"/>',
+    chat:'<path d="M21 11a8 8 0 0 1-8 8H7l-5 3V11a9 9 0 0 1 19 0Z"/><path d="M7 10h9M7 14h6"/>',
+    settings:'<circle cx="12" cy="12" r="3"/><path d="m9 2-1 3-3 1-3 3 2 3-2 3 3 3 3 1 1 3h6l1-3 3-1 3-3-2-3 2-3-3-3-3-1-1-3Z"/>',
+    shield:'<path d="m12 2-9 4v6c0 5 9 10 9 10s9-5 9-10V6ZM8 12l3 3 5-6"/>',
+    wifi:'<path d="M2 8a16 16 0 0 1 20 0M5 12a11 11 0 0 1 14 0M9 16a5 5 0 0 1 6 0"/><circle cx="12" cy="20" r="1" fill="currentColor" stroke="none"/>',
+    cloud:'<path d="M6 19h12a4 4 0 0 0 0-8 6 6 0 0 0-12-2 5 5 0 0 0 0 10Z"/>',
+    check:'<path d="m5 12 4 4L19 6"/>',
+    trash:'<path d="M4 6h16M9 3h6M6 6l1 15h10l1-15M10 10v7M14 10v7"/>',
+    person:'<circle cx="12" cy="7" r="4"/><path d="M4 22v-3a8 8 0 0 1 16 0v3"/>'
+  };
+  const icon = (name,cl='') => `<svg class="${cl}" viewBox="0 0 24 24" aria-hidden="true">${marks[name]||marks.diary}</svg>`;
+  const source = 'https://gutenberg.net.au/ebooks01/0100021h.html';
+  const notify = text => document.querySelector('#announcer').textContent = text;
+  function focusCurrent() {
+    main.querySelector('[data-focus]')?.focus({preventScroll:true});
+    main.querySelector('.app-scroll')?.scrollTo({top:0});
+    window.scrollTo({top:0,behavior:'instant'});
+  }
+  function statusbar(time,phase=0) {
+    return `<div class="ios-statusbar"><time>${esc(time)}</time><div class="dynamic-island"><span class="island-lens"></span>${phase>0?'<span class="privacy-light" title="Simulated indicator"></span>':''}</div><div class="ios-signals"><span class="cellular" aria-hidden="true"><i></i><i></i><i></i><i></i></span>${icon('wifi')}<span class="battery"><i></i></span></div></div>`;
+  }
+  function phone(inner,{time='07:18',phase=0,locked=false}={}) {
+    return `<div class="iphone ${locked?'locked':''} phase-${phase}" aria-label="Simulated iPhone 17 Pro Max"><span class="hardware-key action-key"></span><span class="hardware-key volume-up"></span><span class="hardware-key volume-down"></span><span class="hardware-key side-key"></span><span class="hardware-key camera-control"></span><div class="iphone-display">${statusbar(time,phase)}${inner}<div class="home-area" aria-hidden="true"><span class="home-indicator"></span></div></div></div>`;
+  }
+  function appIcon(type,cls='') {return `<span class="app-icon icon-${type} ${cls}">${icon(type)}</span>`;}
+  function landing() {
+    view='landing';
+    main.innerHTML=`<section class="hero" aria-labelledby="hero-title"><div class="hero-copy"><h1 id="hero-title">What if your<br>phone became<br>a <em>telescreen?</em></h1><div class="hero-credit" aria-label="Project credits"><strong>Brennan Park · 1B · English 11</strong><span>1984 Creative Summative Project</span></div><div class="hero-actions"><button class="primary-button" data-action="start">START SIMULATION <span aria-hidden="true">↗</span></button><span class="duration">5–7 MINUTES<br>9 DECISIONS · YOUR PACE</span></div></div><div class="hero-device"><div class="device-orbit"></div>${phone(`<div class="lock-screen"><div class="wallpaper"></div><div class="lock-content"><span class="lock-icon">${icon('lock')}</span><div class="lock-date">Date unknown</div><div class="lock-time">07:18</div><div class="lock-notifications"><div class="lock-notification"><div class="notification-top">${appIcon('ration')}<strong>Ministry of Plenty</strong><time>Yesterday</time></div><p>Chocolate allowance will fall<br>from <b>30g to 20g</b> per week.</p></div><div class="lock-notification"><div class="notification-top">${appIcon('fitness')}<strong>Fitness</strong><time>now</time></div><p>Your morning session is ready.<br>Attendance is required.</p></div></div><div class="lock-bottom"><span class="focus-badge">☾ &nbsp; Personal</span><button class="unlock-button" data-action="start">Open your day <span aria-hidden="true">↑</span></button></div></div></div>`,{locked:true})}</div></section>`;
+  }
+  function newUI() {return {note:initialNote,coachLive:false,feedPaused:false,revised:false,compare:false,updated:false,judgment:'bad',praise:'excellent'};}
+  function messages(scene) {return `<div class="messages">${scene.messages.map(m=>`<div class="message ${esc(m.kind)}"><span>${esc(m.sender)}</span><p>${esc(m.text)}</p></div>`).join('')}</div>`;}
+  const oldNotice = `<div class="notification-card old-notice"><div class="notification-top">${appIcon('ration')}<strong>Ministry of Plenty</strong><time>Yesterday</time></div><h3>Reduction announced</h3><p>Chocolate: <s>30g</s> → <strong>20g</strong></p><small>Earlier notification · retained on this simulated device</small></div>`;
+  function documentCard(revised=false) {return `<div class="document-card"><div class="document-meta"><span>THE TIMES / PRODUCTION</span><span>REV. ${revised?'02':'01'}</span></div><h3>${revised?'Boot output exceeds expectations.':'Quarterly boot production.'}</h3><p>Forecast: <b class="number-edit">${revised?'57':'145'} million pairs</b></p><p>Reported output: <b>62 million pairs</b></p><div class="document-rule"></div><p class="document-conclusion">${revised?'Production surpassed the forecast.':'Production fell short of the forecast.'}</p></div>`;}
+  function keyboardPreview() {return `The news is ${ui.judgment}. The Party calls it ${ui.praise}.`;}
+  function widget(scene) {
+    const f=state.flags;
+    switch(scene.type) {
+      case 'diary': return `<div class="morning-notice">${icon('ration')}<div><small>YESTERDAY · MINISTRY OF PLENTY</small>Chocolate allowance will fall: <b>30g → 20g</b>.</div></div><section class="notes-app"><div class="notes-location">${icon('lock')} On my iPhone <span>1 note</span></div><label for="note-draft" class="note-date">Date unknown · Private draft</label><textarea id="note-draft" maxlength="280" spellcheck="false" aria-describedby="note-help">${esc(ui.note)}</textarea><p id="note-help" class="microcopy">Edit the fictional thought, or use this draft. Keep real personal details out.</p><div class="sync-banner">${icon('cloud')}<div><strong>Automatic syncing is on</strong><p>Backup pending. This private folder may sync to Victory Cloud; no upload has happened yet.</p></div></div></section>`;
+      case 'fitness': return `<section class="fitness-app"><div class="fitness-video ${ui.coachLive?'coach-live':''}"><div class="video-top"><span class="video-badge">${ui.coachLive?'LIVE · SIMULATED':'RECORDED WARM-UP'}</span><span>${esc(scene.time)}</span></div><svg class="instructor" viewBox="0 0 240 180" aria-hidden="true"><circle cx="121" cy="39" r="18"/><path d="M119 60 96 110m23-50 26 54M109 78 56 65m55 14 71-8M97 109l-14 51m17-48 39 43"/></svg><div class="fitness-caption">${ui.coachLive?'6079 Smith W.<br>Bend lower, please.':'Physical Jerks<br><small>Morning movement / Group 30–40</small>'}</div></div>${!ui.coachLive?'<button class="app-primary fitness-start" data-action="start-exercise">Start the exercise <span>▶</span></button>':'<div class="intrusion-banner">'+icon('eye')+'<span>The instructor can see you.<small>Fictional event. No real camera is used.</small></span></div>'}<div class="activity-rings" aria-hidden="true"><i></i><span>MOVE &nbsp; EXERCISE &nbsp; CONFORM</span></div></section>`;
+      case 'hate': return `<section class="stream-app"><div class="broadcast"><div class="video-top"><span class="live-badge">● LIVE</span><span>02:00 / compulsory</span></div><svg viewBox="0 0 280 180" class="goldstein" aria-hidden="true"><circle cx="140" cy="69" r="33"/><path d="M73 180v-21c0-37 30-54 67-54s67 17 67 54v21"/><path d="M104 48c4-32 65-37 75 7M119 72h16m10 0h16m-26 0h10M130 100l10 15 11-15"/></svg><div class="broadcast-title"><span>ENEMY OF THE PEOPLE</span><h3>EMMANUEL GOLDSTEIN</h3></div></div><div class="stream-meta"><strong>Two Minutes Hate</strong><span>18.4k watching · simulated</span><button class="inline-button" data-action="pause-feed" aria-pressed="${ui.feedPaused}">${ui.feedPaused?'Resume comments':'Pause comments'}</button></div><div class="live-comments ${ui.feedPaused?'paused':''}" aria-label="Scripted livestream comments"><p><b>@Parsons</b> All of us stand with the Party. <span>♥ 420</span></p><p><b>@RecordsDept</b> Show your loyalty. <span>♥ 891</span></p><p><b>@AirstripOne</b> Silence is visible too. <span>♥ 1.2k</span></p></div><div class="participation"><i></i>YOUR PARTICIPATION IS BEING RECORDED</div></section>`;
+      case 'records': return `<section class="records-app"><div class="work-ticket"><span>WORK ITEM 118 / DATE UNKNOWN</span><p>Replace the old forecast with <b>57 million</b>. The reported output stays at 62 million. Submit the “corrected” report.</p></div>${documentCard(ui.revised)}<button class="app-secondary" data-action="revise">${ui.revised?'Undo preview':'Apply correction: 145m → 57m'} <span>↺</span></button><p class="microcopy">Figures from Part One, Chapter 4. Neither version establishes what was actually produced.</p></section>`;
+      case 'ration': return `<section class="ration-app"><div class="notification-card new-notice"><div class="notification-top">${appIcon('ration')}<strong>Ministry of Plenty</strong><time>Now</time></div><h3>Good news for every citizen.</h3><p>The chocolate allowance has been <b>increased to 20g</b> per week.</p></div><button class="app-secondary" data-action="compare" aria-expanded="${ui.compare}">${ui.compare?'Hide earlier notification':'Compare with yesterday'} <span>⇄</span></button>${ui.compare?oldNotice:''}<div class="gratitude-feed"><p><b>Parsons</b> Grateful for another increase. <span>♥ 2.4k</span></p><p><b>VictoryBlock7</b> Better every day! <span>♥ 807</span></p></div></section>`;
+      case 'keyboard': return `<section class="keyboard-app"><div class="chat-recipient"><span class="avatar">M</span><div><strong>Mira</strong><small>Messages · draft not sent</small></div></div><div class="compose-bubble" id="composed-message" aria-live="polite">${esc(keyboardPreview())}</div><div class="keyboard-update"><div>${appIcon('keyboard')}<div><strong>Newspeak · vocabulary preview</strong><p>Syme · Research Department<br>Eleventh Edition still in preparation.</p></div></div>${!ui.updated?'<button class="app-primary" data-action="install-keyboard">Preview required update</button>':'<span class="update-complete">'+icon('check')+' Update preview · vocabulary restricted</span>'}</div><div class="word-keyboard"><div class="word-keys"><button data-action="word" data-id="bad" ${ui.updated?'disabled':''}>${ui.updated?'<s>bad</s>':'bad'}</button><button data-action="word" data-id="ungood">ungood</button><button data-action="word" data-id="excellent" ${ui.updated?'disabled':''}>${ui.updated?'<s>excellent</s>':'excellent'}</button><button data-action="word" data-id="doubleplusgood">doubleplusgood</button></div><div class="qwerty" aria-hidden="true">${['QWERTYUIOP','ASDFGHJKL','ZXCVBNM'].map(row=>`<div>${[...row].map(k=>`<span>${k}</span>`).join('')}</div>`).join('')}<div><span class="space-key">Newspeak · training keyboard</span></div></div></div><p class="microcopy">Tap word keys to compose. ${ui.updated?'“Bad” becomes “ungood”; “excellent” becomes “doubleplusgood.” Choose below whether to keep this update.':'Notice which words you can use before the update.'}</p></section>`;
+      case 'chat': return `<section class="chat-app"><div class="chat-recipient"><span class="avatar">M</span><div><strong>Mira</strong><small>Records Department · invented character</small></div></div>${messages(scene)}<div class="report-form"><span>COMMUNITY SAFETY / PRE-FILLED REPORT</span><p>Subject: Mira<br>Concern: questioning the ration announcement</p><span class="form-status">Awaiting your response</span></div></section>`;
+      case 'settings': return `<section class="settings-app"><div class="settings-profile"><span class="profile-avatar">WS</span><div><strong>Winston Smith</strong><small>6079 Smith W. · Outer Party</small></div></div><h3>Party Continuity</h3><div class="settings-list"><div>${icon('eye')}<span>Continuous observation</span><span class="fake-switch on" aria-label="Currently on"></span></div><div>${icon('cloud')}<span>Automatic cloud sync</span><span class="fake-switch on" aria-label="Currently on"></span></div><div>${icon('lock')}<span>Private mode</span><small>Restricted</small></div></div><p class="settings-note">Transit, work, and messages now share this connection. Choose your boundary below.</p><div class="intrusion-banner">${icon('eye')}<span>Disconnection will be recorded.<small>Changing this fictional setting does not affect your device.</small></span></div></section>`;
+      case 'diary-return': return `<section class="return-app">${state.flags.monitoring==='offline'?'<div class="offline-notice">No connection · local screen and paper notice</div>':''}<div class="original-note"><span class="note-date">THIS MORNING’S NOTE</span>${keptNote?`<p>${esc(keptNote)}</p>`:'<p class="muted">No note remains. You deleted it this morning.</p>'}</div><div class="attestation"><span>DAILY ATTESTATION / INVENTED CHOICE</span><p>I received truthful information today and chose freely to support the Party.</p></div>${messages(scene)}</section>`;
+      default:return messages(scene);
+    }
+  }
+  function choiceMarkup(scene) {
+    const prerequisite = scene.type==='fitness'&&!ui.coachLive ? 'Start the exercise above first.' : scene.type==='keyboard'&&!ui.updated ? 'Preview the keyboard update above first.' : '';
+    return `<div class="decision-prompt"><span>YOUR DECISION</span><p>${esc(scene.prompt)}</p></div>${prerequisite?`<p class="prerequisite">${esc(prerequisite)}</p>`:''}<div class="choice-list">${scene.choices.map((c,i)=>{const disabled=c.disabled||prerequisite||(c.id==='save_diary'&&!ui.note.trim());return `<button class="choice-button" data-action="choose" data-id="${esc(c.id)}" ${disabled?'disabled':''}><span class="choice-content"><strong>${esc(c.label)}</strong><small>${esc(c.disabled?c.reason:c.detail)}</small></span><span class="choice-chevron" aria-hidden="true">›</span></button>`;}).join('')}</div>`;
+  }
+  function mountGame(scene,content,{preserveScroll=false,result=false}={}) {
+    const scroll=preserveScroll?(main.querySelector('.app-scroll')?.scrollTop||0):0;
+    const focused=preserveScroll&&main.contains(document.activeElement)?document.activeElement:null;
+    const focusAction=focused?.dataset.action,focusId=focused?.dataset.id;
+    const phase=Math.min(2,Math.floor((result?state.step-1:state.step)/3));
+    const count=result?state.step:state.step+1;
+    const status=Telescreen.status(state);
+    const chapterLabels=['THE PRIVATE SELF','THE PUBLIC RECORD','THE COST OF CONFORMITY'];
+    main.innerHTML=`<section class="game-layout"><aside class="story-sidebar"><div class="eyebrow red">${String(count).padStart(2,'0')} / 09 · ${chapterLabels[phase]}</div><h1 data-focus tabindex="-1">${esc(scene.title)}</h1><p>${esc(scene.context)}</p><button class="connection-button" data-action="connection">${icon('book')}Connection to <i>1984</i><span>↗</span></button><p class="scene-chapter">${esc(scene.connection?.chapter||'Part One')}</p><div class="scene-progress" aria-label="${state.step} of 9 decisions complete">${Array.from({length:9},(_,i)=>`<i class="${i<state.step?'done':i===state.step?'current':''}"></i>`).join('')}</div><div class="character-note"><span class="eyebrow">YOU ARE WINSTON SMITH</span><p>Your note, your work, and a colleague’s trust are becoming part of the same record.</p></div><button class="text-button restart-button" data-action="restart">↺ &nbsp; Restart simulation</button></aside><div class="playable-device">${phone(`<div class="phone-app theme-${scene.type}"><div class="party-scorebar"><span>${icon('eye')} PARTY LOYALTY</span><strong>${state.score}<small>/100</small>${result?`<em>${signed(state.history.at(-1).delta)}</em>`:''}</strong></div><div class="app-navbar">${appIcon(scene.type)}<strong>${esc(scene.app)}</strong><button class="app-info" data-action="connection" aria-label="Connection to 1984">${icon('book')}</button></div><div class="app-scroll" tabindex="0" aria-label="${esc(scene.app)} content, scroll for decisions">${content}<p class="screen-simulation">SIMULATED · NO REAL DEVICE ACCESS</p></div></div>`,{time:scene.time,phase})}</div><aside class="record-sidebar"><div class="status-card"><span class="eyebrow">YOUR STANDING</span><h2>${esc(status.label)}</h2><div class="loyalty-meter"><span style="width:${state.score}%"></span></div><p>${esc(status.detail)}</p></div><div class="score-note">${icon('shield')}<p>The Party rewards compliance.<br><strong>This is not a moral grade.</strong><br>The numerical score is invented, not in the novel.</p></div><details class="decision-log" ${state.history.length?'open':''}><summary>Your record <span>${state.history.length}/9</span></summary>${state.history.length?state.history.map((h,i)=>`<div class="log-row"><span>${i+1}</span><p>${esc(h.label)}</p><em>${signed(h.delta)}</em></div>`).join(''):'<p class="no-record">The day has not been written yet.</p>'}</details></aside></section>`;
+    if(preserveScroll) {
+      const replacement=[...main.querySelectorAll('[data-action]')].find(b=>b.dataset.action===focusAction&&b.dataset.id===focusId&&!b.disabled);
+      const target=replacement||main.querySelector('#scene-widget');
+      if(target&&focused){if(!replacement)target.setAttribute('tabindex','-1');target.focus({preventScroll:true});}
+      main.querySelector('.app-scroll').scrollTop=scroll;
+    } else focusCurrent();
+  }
+  function renderScene(preserve=false) {
+    view='scene';
+    previousScene=Telescreen.scene(state);
+    const incoming=['hate','records','ration'].includes(previousScene.type)?previousScene.messages.filter(m=>m.kind==='friend').map(m=>`<div class="in-app-message">${appIcon('chat')}<div><strong>${esc(m.sender)}</strong><p>${esc(m.text)}</p></div></div>`).join(''):'';
+    mountGame(previousScene,`<div id="scene-widget">${widget(previousScene)}${incoming}</div>${choiceMarkup(previousScene)}`,{preserveScroll:preserve});
+    if(!preserve)notify(`Decision ${state.step+1} of 9. ${previousScene.title}. Party loyalty ${state.score}.`);
+  }
+  function consequenceVisual() {
+    const f=state.flags,type=previousScene.type;
+    if(type==='diary') return f.diary==='deleted'?`<div class="empty-note">${icon('trash')}<h3>No notes</h3><p>The draft has disappeared from this phone.</p></div>`:`<div class="saved-note"><span class="note-date">${f.diary==='softened'?'EDITED NOTE':'SAVED NOTE'} · VICTORY CLOUD SYNC PENDING</span><p>${esc(keptNote)}</p></div>`;
+    if(type==='records'&&f.records==='question')return `<div class="archive-status removed">${icon('lock')}<div><strong>Work item reassigned</strong><small>The original is no longer available in your workspace. Your query remains in the shared work log.</small></div></div>`;
+    if(type==='records') return `${documentCard(true)}<div class="archive-status ${f.evidence?'retained':'removed'}">${icon(f.evidence?'lock':'trash')}<div><strong>${f.evidence?'Original retained in local archive':f.records==='question'?'Submission held · original retained at work':'Original report removed'}</strong><small>${f.evidence?'Not uploaded. The Party sees the submitted revision.':f.records==='question'?'Your query is visible to your supervisor.':'The former forecast no longer appears in the work archive.'}</small></div></div>${f.evidence?`<details class="preserved-copy"><summary>Inspect the secret copy</summary>${documentCard(false)}</details>`:''}`;
+    if(type==='hate') return `<div class="reaction-receipt"><span class="live-badge">TRANSMISSION ENDED</span><h3>${f.hate==='silent'?'No reaction recorded':f.hate==='fake'?'Approved reaction recorded':'Public denunciation posted'}</h3><p>${f.hate==='fake'?'The system records enthusiasm. It cannot read the feeling behind it.':f.hate==='silent'?'Your absence is now a visible entry.':'Your name appears in the stream.'}</p></div>`;
+    if(type==='keyboard') return `<div class="messages"><div class="message self"><span>YOUR UNSENT DRAFT</span><p>${esc(f.keyboard==='approved'?'The news is ungood. The Party calls it doubleplusgood.':f.keyboard==='coded'?'b/e — remember at home':originalMessage)}</p></div></div><p class="delivery-status">${f.keyboard==='original'?'Original keyboard retained · draft not sent':f.keyboard==='coded'?'Compatibility mode · private shorthand':'Updated keyboard · draft not sent'}</p>`;
+    if(type==='ration') return `<div class="notification-card"><div class="notification-top">${appIcon('ration')}<strong>Ministry of Plenty</strong></div><h3>${f.ration==='celebrate'?'Your thanks have been shared.':f.ration==='challenge'?'Your comparison is under review.':'No public response.'}</h3><p>Earlier ration: <b>30g</b> → announced ration: <b>20g</b>.<br>A reduction is being presented as an increase.</p></div>`;
+    if(type==='fitness') return `<div class="fitness-receipt">${icon('fitness')}<span>SESSION RECORDED</span><h3>${f.exercise==='cover'?'Preview covered. Review opened.':f.exercise==='explain'?'Your explanation is on record.':'Movement accepted.'}</h3><p>No real camera was accessed.</p></div>`;
+    if(type==='settings')return `<div class="connection-receipt ${f.monitoring==='offline'?'offline':''}">${icon(f.monitoring==='offline'?'lock':'eye')}<h3>${f.monitoring==='offline'?'Device offline':f.monitoring==='limited'?'Limited mode':'Always connected'}</h3><p>${f.monitoring==='offline'?'Local notes remain. Network services are unavailable.':f.monitoring==='limited'?'Essential services only. Some requests are restricted.':'Work, messages, and observation continue together.'}</p></div>`;
+    if(type==='chat')return `<div class="message friend"><span>MIRA</span><p>${f.reported?'This account is unavailable.':state.history.at(-1).choice==='defend'?'Thank you for standing beside me.':'I understand. I think.'}</p></div>`;
+    return `<div class="final-receipt">${icon('diary')}<span>${f.final==='sign'?'ATTESTATION SUBMITTED':f.final==='refuse'?'CONFIRMATION REFUSED':'YOUR ACCOUNT PRESERVED'}</span></div>`;
+  }
+  function renderResult() {
+    view='result';
+    const r=state.result;
+    mountGame(previousScene,`<div class="result-app"><div class="result-visual">${consequenceVisual()}</div><div class="result-copy"><span class="eyebrow">DECISION ${String(state.step).padStart(2,'0')} RECORDED</span><h2>${esc(r.title)}</h2><p>${esc(r.text)}</p>${r.reply?`<div class="reply-bubble">${esc(r.reply)}</div>`:''}</div><div class="score-adjustment"><span>Party loyalty adjustment</span><strong>${signed(state.history.at(-1).delta)}</strong></div><button class="app-primary next-button" data-action="next">${state.step===9?'Receive Party assessment':'Continue the day'} <span>→</span></button><button class="result-connection" data-action="connection">${icon('book')}Connection to <i>1984</i></button></div>`,{result:true});
+    notify(`${r.title}. Party loyalty ${state.score}. ${r.text}`);
+  }
+  const reflections={belief:'Which earlier choice made that possible? Consider who shared its cost—and whether they had a choice.',system:'The possibility of punishment can become enough. At what point did you begin editing yourself before the Party asked?',unsure:'That uncertainty matters. Fear, care, convenience, and conviction can be present in the same choice. What would help you speak more freely?'};
+  function renderEnding() {
+    view='ending';
+    const e=Telescreen.ending(state);
+    main.innerHTML=`<section class="ending assessment assessment-${esc(e.id)}" aria-labelledby="assessment-title">
+      <div class="assessment-heading"><span class="eyebrow red">${icon('eye')} MINISTRY OF LOVE / CITIZEN ASSESSMENT</span><span class="assessment-file">6079 SMITH W. · ASSESSMENT COMPLETE</span></div>
+      <div class="assessment-verdict">
+        <div class="assessment-score"><span class="eyebrow">OVERALL PARTY LOYALTY SCORE</span><div class="score-value" aria-label="${state.score} out of 100"><strong>${state.score}</strong><span>/100</span></div><div class="assessment-meter" aria-hidden="true"><span style="--score:${state.score}%"></span></div><span class="score-status">NINE DECISIONS. ONE PERMANENT RECORD.</span></div>
+        <div class="assessment-outcome"><span class="verdict-stamp">FINAL DETERMINATION / ${esc(e.rangeLabel)}</span><h1 id="assessment-title" data-focus tabindex="-1">${esc(e.title)}</h1><p class="assessment-message">${esc(e.text)}</p><div class="assessment-cost"><span>${e.id==='inner-party'?'THE PRICE OF APPROVAL':'THE COST'}</span><p>${esc(e.sacrificed)}</p></div></div>
+      </div>
+      <section class="assessment-evidence" aria-labelledby="evidence-title"><h2 id="evidence-title">Your record speaks for you.</h2><ol>${e.evidence.map(h=>`<li><div class="evidence-meta"><span>DECISION ${String(h.step+1).padStart(2,'0')}</span><span>${signed(h.delta)} LOYALTY</span></div><h3>${esc(h.label)}</h3><p>${esc(h.reason)}</p></li>`).join('')}</ol></section>
+      <ol class="assessment-bands" aria-label="Party outcome score ranges">${Telescreen.endingBands.map(b=>`<li class="${b.id===e.id?'current':''}" ${b.id===e.id?'aria-current="true"':''}><span class="band-range">${b.min}–${b.max}</span><strong>${esc(b.label)}</strong>${b.id===e.id?'<span class="band-marker">YOUR RESULT</span>':''}</li>`).join('')}</ol>
+      <div class="ending-actions assessment-actions"><button class="primary-button" data-action="replay">Try Again <span aria-hidden="true">↺</span></button><p>The Party remembers this version of you.<br>Will you give it a different one?</p><button class="text-button" data-action="about">Novel, adaptation &amp; sources ↗</button></div>
+      <div class="assessment-extras"><details class="ending-record"><summary>Review your score and nine decisions</summary><p class="calculation-note">You began at 60. Recorded choices adjusted the score after each decision, with a minimum of 0 and a maximum of 100. Undiscovered private choices did not change it. The final score alone determines the outcome shown above.</p>${state.history.map((h,i)=>`<article><span class="eyebrow red">${String(i+1).padStart(2,'0')}</span><div><h3>${esc(h.title)} — ${esc(h.label)}</h3><p>${esc(h.consequence)}</p></div><strong>${signed(h.delta)}</strong></article>`).join('')}</details>
+      <details class="assessment-reflection"><summary>A question for you</summary><section class="reflection"><h2>Did you start choosing what you believed—or what the system wanted?</h2><div class="reflection-options"><button data-action="reflect" data-id="belief" aria-pressed="false">What I believed</button><button data-action="reflect" data-id="system" aria-pressed="false">What the system wanted</button><button data-action="reflect" data-id="unsure" aria-pressed="false">I’m not sure anymore</button></div><p id="reflection-response" aria-live="polite">There is no score for this answer. Your reflection is not saved.</p></section></details></div>
+    </section>`;
+    focusCurrent();notify(`Party assessment complete. ${e.title} Overall Party Loyalty Score: ${state.score} out of 100.`);
+  }
+  function openDialog(contents) {
+    opener=document.activeElement;
+    dialog.innerHTML=`<div class="dialog-top"><span class="eyebrow red">TELESCREEN / READER’S NOTES</span><button class="close-dialog" data-action="close" aria-label="Close dialog">×</button></div>${contents}`;
+    dialog.showModal();
+  }
+  function connection() {
+    const c=previousScene?.connection;
+    if(!c)return;
+    openDialog(`<span class="chapter-tag">${esc(c.chapter)}</span><h2 id="dialog-title">${esc(c.title)}</h2><div class="connection-section"><span class="eyebrow">IN THE NOVEL</span><p>${esc(c.original)}</p></div><div class="connection-section"><span class="eyebrow red">IN THIS ADAPTATION</span><p>${esc(c.adaptation)}</p></div><p class="dialog-small">The smartphone features, available choices, Party Loyalty Score, and endings are invented. The story compresses events into one day and does not reproduce the novel’s sequence.</p><a class="source-link" href="${source}" target="_blank" rel="noopener noreferrer">Read Orwell’s text at Project Gutenberg Australia ↗</a><button class="primary-button dialog-return" data-action="close">RETURN TO THE SIMULATION <span>→</span></button>`);
+  }
+  function about() {
+    const types=['diary','hate','fitness','records','ration','keyboard'];
+    const scenes=Array.from({length:9},(_,step)=>Telescreen.scene({...Telescreen.initialState(),step}));
+    openDialog(`<h2 id="dialog-title">Winston’s world.<br>A familiar screen.</h2><p class="dialog-lead">An English project on digital surveillance, freedom of expression, and the pressure to censor ourselves.</p><div class="about-safe">${icon('shield')}<div><strong>Everything monitored is simulated.</strong><p>No real camera, microphone, location, contacts, or account access. Game choices and edited drafts stay only in this page’s memory; replay or refresh clears them. No login, analytics, or external game services.</p></div></div><h3>Six scenes, translated into apps</h3><div class="about-scenes">${types.map(type=>{const s=scenes.find(s=>s.type===type),c=s.connection;return `<article>${appIcon(type)}<div><span class="eyebrow">${esc(c.chapter)}</span><h4>${esc(c.title)}</h4><p><b>Original:</b> ${esc(c.original)}</p><p><b>Adaptation:</b> ${esc(c.adaptation)}</p></div></article>`;}).join('')}</div><h3>What belongs to this game?</h3><p>The smartphone, CivicOS, Victory Cloud, Mira, daily attestation, branching choices, and endings are invented. All literary references stop at Part One. Events are compressed and rearranged into one day; the app schedule is invented. The numerical <strong>Party Loyalty Score is not a system described in <i>1984</i></strong>. It measures the fictional Party’s approval, never morality. The four score-based outcomes—including Inner Party promotion—are invented game scenarios, not events that happen to Winston in Part One or a system of advancement described in the novel.</p><h3>Why a phone?</h3><p>Familiar interfaces make the pressure personal. This authoritarian scenario is not a description of ordinary technology or a claim about Apple. The concern is how monitoring, unequal power, and consequences for disagreement can make people silence themselves.</p><h3>Design reference</h3><p>The simulated iPhone 17 Pro Max follows Apple’s 163.4 × 78.0 mm body proportions, 2868 × 1320 display ratio, rounded display corners, and Dynamic Island. App interfaces are an educational interpretation, not Apple software.</p><div class="source-list"><a href="${source}" target="_blank" rel="noopener noreferrer">George Orwell, <i>Nineteen Eighty-Four</i> (1949) ↗</a><a href="https://support.apple.com/en-us/125091" target="_blank" rel="noopener noreferrer">Apple · iPhone 17 Pro Max technical specifications ↗</a><a href="https://www.apple.com/am/iphone-17-pro/specs/" target="_blank" rel="noopener noreferrer">Apple · official design and dimension references ↗</a></div><button class="primary-button dialog-return" data-action="close">BACK TO THE EXPERIENCE <span>→</span></button>`);
+  }
+  function reset() {state=Telescreen.initialState();ui=newUI();previousUI={};previousScene=null;keptNote=null;renderScene();}
+  document.addEventListener('input',event=>{if(event.target.id==='note-draft'){ui.note=event.target.value;const b=main.querySelector('[data-id="save_diary"]');if(b)b.disabled=!ui.note.trim();}});
+  document.addEventListener('click', event => {
+    if(event.detail>1)return;
+    const button=event.target.closest('[data-action]');
+    if(!button||button.disabled)return;
+    const action=button.dataset.action;
+    if(action==='about'){about();return;}
+    if(action==='connection'){connection();return;}
+    if(action==='close'){dialog.close();return;}
+    if(action==='start'||action==='replay'){reset();return;}
+    if(action==='restart'){openDialog('<h2 id="dialog-title">Begin the day again?</h2><p>Your choices, drafts, relationships, and loyalty score will be cleared.</p><div class="restart-actions"><button class="primary-button" data-action="confirm-restart">RESTART SIMULATION <span>↺</span></button><button class="text-button" data-action="close">Keep playing</button></div>');dialog.querySelector('[data-action="close"]').focus();return;}
+    if(action==='confirm-restart'){dialog.close();reset();return;}
+    if(action==='reflect'){document.querySelectorAll('[data-action="reflect"]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));document.querySelector('#reflection-response').textContent=reflections[button.dataset.id];return;}
+    if(view==='scene') {
+      if(action==='start-exercise'){ui.coachLive=true;renderScene(true);notify('The instructor addresses Winston directly. This is simulated; no camera is used.');return;}
+      if(action==='pause-feed'){ui.feedPaused=!ui.feedPaused;main.querySelector('.live-comments').classList.toggle('paused',ui.feedPaused);button.setAttribute('aria-pressed',String(ui.feedPaused));button.textContent=ui.feedPaused?'Resume comments':'Pause comments';return;}
+      if(action==='revise'){ui.revised=!ui.revised;renderScene(true);notify(ui.revised?'Forecast changed from 145 million to 57 million in the preview.':'Original forecast restored in the preview.');return;}
+      if(action==='compare'){ui.compare=!ui.compare;renderScene(true);return;}
+      if(action==='install-keyboard'){ui.updated=true;ui.judgment='ungood';ui.praise='doubleplusgood';renderScene(true);notify('Update preview. Bad and excellent are unavailable. The draft now says: The news is ungood. The Party calls it doubleplusgood.');return;}
+      if(action==='word'){const w=button.dataset.id;if(w==='bad'||w==='ungood')ui.judgment=w;else ui.praise=w;main.querySelector('#composed-message').textContent=keyboardPreview();return;}
+      if(action==='choose') {
+        if(previousScene.type==='fitness'&&!ui.coachLive||previousScene.type==='keyboard'&&!ui.updated)return;
+        const id=button.dataset.id;
+        previousUI={...ui};
+        if(state.step===0)keptNote=id==='save_diary'?ui.note.trim():id==='soften_diary'?approvedNote:null;
+        state=Telescreen.choose(state,id);renderResult();return;
+      }
+    }
+    if(action==='next'&&view==='result'){if(state.step===9)renderEnding();else{ui=newUI();renderScene();}}
+  });
+  dialog.addEventListener('close',()=>{if(opener?.isConnected)opener.focus({preventScroll:true});});
+  landing();
+})();

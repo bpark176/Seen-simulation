@@ -1,0 +1,63 @@
+TELESCREEN — What If Your Phone Became a Telescreen?
+
+Play offline: open Telescreen-offline.html in a modern web browser.
+Play from this source folder: open dist/index.html, or serve dist with any static web server.
+No dependencies, installation, login, API keys, or network connection are required to play.
+
+This modern adaptation follows Winston through nine decisions in one compressed day.
+Six recognizable scenes from Part One become interactive apps:
+  Diary (Chapter 1): edit, save, soften, or delete a supposedly private note.
+  Physical Jerks (Chapter 3): a recorded-looking instructor suddenly addresses Winston.
+  Two Minutes Hate (Chapter 1): respond to a monitored compulsory livestream.
+  Records (Chapter 4): revise the 145-million forecast to 57 million against a reported 62 million; preserve or question it.
+  Ration (Chapter 5): compare a 30g-to-20g reduction with the claim of an increase to 20g.
+  Newspeak (Chapter 5): preview bad/ungood and excellent/doubleplusgood, following Syme’s examples.
+A fictional colleague, a connectivity choice, and a final attestation connect the consequences.
+The final Party assessment uses the cumulative 0–100 loyalty score alone:
+  0–24: You have been vaporized.
+  25–49: You have been sent for re-education.
+  50–79: You remain under surveillance.
+  80–100: You have been promoted to the Inner Party.
+The score begins at 60 and is bounded after each recorded choice. Private, undiscovered
+actions do not change it. The dossier cites recorded choices behind the result and shows
+the personal cost. These outcomes and thresholds are invented, not Winston's canonical fate.
+Try Again clears the completed run and starts a new day.
+Optional chapter-specific notes distinguish the novel from the invented apps, choices, and score.
+The phone displays Date unknown. Literary references stop at Part One; the daily app schedule is invented.
+The boot-production reports are unreliable figures, not verified production totals.
+Syme is still helping compile the Eleventh Edition; the training keyboard is a modern adaptation.
+
+Files
+  dist/index.html — accessible page shell
+  dist/style.css — responsive iPhone design and reduced-motion styles
+  dist/app.js — app interactions, dialogs, keyboard focus, reflection, and replay
+  dist/story.js — nine decisions, relationships, conditional choices, four endings
+  tests/story.test.js — exhaustive traversal and narrative regression checks
+
+Verify the engine: node tests/story.test.js
+15,795 complete routes, exactly 9 decisions per route, 4 reachable endings.
+Checks cover every available choice, disabled options, bounded scores, immutable updates,
+clean reset, hidden-choice score neutrality, evidence, relationships, and offline continuity.
+Browser verification covers interactive app controls, all three main choice patterns, reflection,
+replay, restart, modal focus, and responsive 1440px, 390px, and 320px layouts.
+Desktop sizing follows the available browser height, preserving the phone's proportions.
+The opening fits without page scrolling at 1280x650, 1440x750, and 1512x800.
+All nine app screens fit the 1280x650 viewport; their content scrolls inside the phone.
+Mobile keeps its readable, vertically stacked layout.
+
+The game is designed for about 5–7 minutes, with no time limits or forced waits.
+Everything monitored is fictional. No real microphone, camera, location, or data permissions.
+The Party Loyalty Score and all endings are invented, not systems or events in Orwell's novel.
+Choices and edited drafts live only in page memory. Refreshing or replaying clears them.
+
+The simulated iPhone 17 Pro Max follows Apple's 163.4 x 78.0 mm body proportions,
+2868 x 1320 display ratio, rounded display corners, and Dynamic Island. The app screens
+are an educational interpretation. This is not Apple software or a claim about real iPhones.
+
+Sources
+George Orwell, Nineteen Eighty-Four (1949), Part One, Chapters 1, 3, 4, 5:
+https://gutenberg.net.au/ebooks01/0100021h.html
+Apple, iPhone 17 Pro Max specifications:
+https://support.apple.com/en-us/125091
+Apple, official design and dimension reference:
+https://www.apple.com/am/iphone-17-pro/specs/
