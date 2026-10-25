@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111214">
+<meta name="description" content="An optional comparison with scenes from 1984, Part One. Explore the original fictional Party simulation alongside the contemporary Telescreen experience.">
+<title>1984: Optional Literary Comparison · Telescreen</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css?v=720aa1b64d">
+<script src="story.js?v=8c43f307c7" defer></script>
+<script src="app.js?v=136d3ac9bd" defer></script>
+<style>
+.comparison-banner{max-width:1160px;margin:auto;padding:12px 32px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line);color:var(--muted);font:9px/1.6 var(--mono);letter-spacing:.7px}
+.comparison-banner a{color:var(--ink);font:12px/1.6 var(--sans);letter-spacing:0;text-underline-offset:4px}
+.comparison-intro{max-width:400px;font-size:14px;line-height:1.8;color:var(--muted);margin:0 0 22px}
+.comparison-guide{margin-top:16px}
+@media(min-width:681px){.comparison-page{--desktop-phone-width:clamp(250px,calc((100svh - 164px)/2.094871795),330px)}.comparison-page .hero{min-height:calc(100svh - 112px)}.comparison-page .story-sidebar,.comparison-page .record-sidebar{max-height:calc(100svh - 164px)}}
+@media(max-width:680px){.comparison-banner{padding:12px 18px;align-items:flex-start;flex-direction:column;gap:5px}.comparison-intro{font-size:13px}}
+</style>
+</head>
+<body class="comparison-page">
+<a class="skip-link" href="#main">Skip to experience</a>
+<header class="site-header">
+<a class="wordmark" href="index.html" aria-label="Telescreen home"><svg viewBox="0 0 40 24" aria-hidden="true"><path d="M2 12S9 2 20 2s18 10 18 10-7 10-18 10S2 12 2 12Z"/><circle cx="20" cy="12" r="5"/></svg>TELESCREEN<span>.</span></a>
+</header>
+<nav class="comparison-banner" aria-label="Experience navigation"><span>OPTIONAL LITERARY COMPARISON · 1984 PART ONE</span><a href="index.html">Play the contemporary simulation ↗</a></nav>
+<main id="main" tabindex="-1"></main>
+<div id="announcer" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+<dialog id="info-dialog" aria-labelledby="dialog-title"></dialog>
+<noscript><p>This interactive story needs JavaScript. The game does not request real device permissions or require an account.</p></noscript>
+</body>
+</html>
