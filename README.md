@@ -1,4 +1,4 @@
-# What If Your Phone Became a Telescreen?
+# The Price of Staying Connected
 
 Brennan Park · English 11 · B1 — Borst
 1984 Creative Summative Project
@@ -9,7 +9,7 @@ Brennan Park · English 11 · B1 — Borst
 
 The main experience critiques how social media normalizes exchanging data for convenience, personalization, and social connection. The player enters a name or nickname, then plays an 18-year-old student making eight decisions in an educational Instagram simulation. The final **Your Digital Profile** separates explicit information, observed activity, uncertain interest inferences, partner events, recommendations/ads, posting decisions, and privacy boundaries. It uses no loyalty score. Privacy choices genuinely affect later simulated collection, and the no-account route remains playable through a friend's text relay.
 
-The Instagram branding frames a simulation with invented characters, events, and simplified controls. Instagram and Facebook are researched examples; the game does not reproduce their actual algorithms. The accessible Real-World Evidence section distinguishes the FTC's 2024 report, Meta's June 2026 update, age/region differences, and the limits of the comparison to the Party's violent compulsory control. All literary references are from Part One. The original nine-decision literary adaptation and its invented Party score remain optional.
+The Instagram branding frames a simulation with invented characters, events, and simplified controls. Instagram and Facebook are researched examples; the game does not reproduce their actual algorithms. The References section presents an alphabetized MLA 9 bibliography of the existing platform, government, literary, and design sources, plus peer-reviewed work on privacy decisions and self-censorship. All literary references are from Part One. The original nine-decision literary adaptation and its invented Party score remain optional.
 
 Everything is simulated. There are no account logins, analytics, third-party game services, API keys, storage, or real device permission requests. The chosen name and choices live only in page memory; restart, replay, home, or refresh clears them. Name entry accepts up to 40 characters, supports Unicode, and is rendered as text.
 
@@ -17,7 +17,7 @@ Everything is simulated. There are no account logins, analytics, third-party gam
 
 - `docs/index.html` — contemporary main entry point.
 - `docs/social-story.js` — contemporary narrative and deterministic consequence engine.
-- `docs/social-app.js` — interactive app screens, profile reveal, evidence and literary notes.
+- `docs/social-app.js` — interactive app screens, profile reveal, References, and literary notes.
 - `docs/social.css` — contemporary UI using the original dark layout and phone components.
 - `docs/research.js` — verified claims, primary-source links, and literary comparison notes.
 - `docs/comparison.html`, `docs/app.js`, `docs/story.js` — original optional literary adaptation.
