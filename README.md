@@ -3,13 +3,13 @@
 Brennan Park · English 11 · B1
 1984 Creative Summative Project
 
-- **Website:** https://bpark176.github.io/telescreen-simulation/
-- **Repository:** https://github.com/bpark176/telescreen-simulation
-- **Optional literary comparison:** https://bpark176.github.io/telescreen-simulation/comparison.html
+- **Website:** https://bpark176.github.io/Seen-simulation/
+- **Repository:** https://github.com/bpark176/Seen-simulation
+- **Optional literary comparison:** https://bpark176.github.io/Seen-simulation/comparison.html
 
-The main experience critiques how social media normalizes exchanging data for convenience, personalization, and social connection. The player enters a name or nickname, then plays a 16-year-old student making eight decisions in an educational Instagram simulation. The final **Your Digital Profile** separates explicit information, observed activity, uncertain interest inferences, partner events, recommendations/ads, posting decisions, and privacy boundaries. It uses no loyalty score. Privacy choices genuinely affect later simulated collection, and the no-account route remains playable through a friend's text relay.
+The main experience critiques how social media normalizes exchanging data for convenience, personalization, and social connection. The player enters a name or nickname, then plays a 16-year-old student making eight decisions around Seen, a fictional social platform. The final **Your Digital Profile** separates explicit information, observed activity, uncertain interest inferences, partner events, recommendations/ads, posting decisions, and privacy boundaries. It uses no loyalty score. Privacy choices genuinely affect later simulated collection, and the no-account route remains playable through a friend's text relay.
 
-The Instagram branding frames a simulation with invented characters, events, and simplified controls. Instagram and Facebook are researched examples; the game does not reproduce their actual algorithms. The References section presents an alphabetized MLA 9 bibliography of the existing platform, government, literary, and design sources, plus peer-reviewed work on privacy decisions and self-censorship. All literary references are from Part One. The original nine-decision literary adaptation and its invented Party score remain optional.
+Seen uses invented characters, events, and simplified controls. Instagram and Facebook are researched examples; the game does not reproduce their actual algorithms or controls. The References section presents an alphabetized MLA 9 bibliography of the existing platform, government, literary, and design sources, plus peer-reviewed work on privacy decisions and self-censorship. All literary references are from Part One. The original nine-decision literary adaptation and its invented Party score remain optional.
 
 Everything is simulated. There are no account logins, analytics, third-party game services, API keys, storage, or real device permission requests. The chosen name and choices live only in page memory; restart, replay, home, or refresh clears them. Name entry accepts up to 40 characters, supports Unicode, and is rendered as text.
 
