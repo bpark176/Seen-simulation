@@ -1,8 +1,8 @@
-/* Research notes for the fictional Loop simulation. No external requests are made here. */
+/* Research notes for the educational Instagram simulation. No external requests are made here. */
 window.TelescreenResearch = {
   checkedAt: '2026-10-25',
   checkedLabel: 'Sources checked 25 October 2026',
-  framing: 'This project argues that when social plans, useful recommendations, and convenient features come together, sharing data can start to feel like the ordinary price of participation. Loop makes that trade-off visible. It is a fictional app, not a replica of Instagram or Facebook. Commercial profiling and peer pressure differ from the Party’s violent, compulsory political control.',
+  framing: 'This project argues that when social plans, useful recommendations, and convenient features come together, sharing data can start to feel like the ordinary price of participation. This Instagram simulation makes that trade-off visible through invented characters, events, and simplified controls. Commercial profiling and peer pressure differ from the Party’s violent, compulsory political control.',
   sources: [
     {
       id: 'ftc-2024',
@@ -58,7 +58,7 @@ window.TelescreenResearch = {
       url: 'https://about.fb.com/news/2023/01/age-appropriate-ads-for-teens/',
       publisher: 'Meta Newsroom',
       date: '10 January 2023; updated 18 January 2023',
-      summary: 'Meta says teen ad targeting is limited to age and location and that teens’ engagement does not inform the ads they see. Loop’s 18-year-old character and simplified advertising example do not represent a Meta teen account.'
+      summary: 'Meta says teen ad targeting is limited to age and location and that teens’ engagement does not inform the ads they see. The game’s 18-year-old character and simplified advertising example do not represent a Meta teen account.'
     },
     {
       id: 'orwell-part-one',
@@ -74,7 +74,7 @@ window.TelescreenResearch = {
       chapter: 'Part One, Chapter 1',
       title: 'Who can see the record?',
       original: 'The telescreen receives as well as broadcasts. Winston cannot turn it fully off or know when the Thought Police are watching.',
-      comparison: 'Loop turns ordinary actions into a profile. The comparison asks who can observe, and how clearly the observed person understands the record.',
+      comparison: 'The simulation turns ordinary actions into a profile. The comparison asks who can observe, and how clearly the observed person understands the record.',
       difference: 'Commercial profiling has different purposes and controls from the Party’s compulsory political surveillance.',
       sourceIds: ['orwell-part-one', 'meta-ranking']
     },
@@ -90,7 +90,7 @@ window.TelescreenResearch = {
       chapter: 'Part One, Chapter 1',
       title: 'When hostility becomes participation',
       original: 'During the Two Minutes Hate, Winston is pulled into the crowd’s rage despite his private hostility toward the Party.',
-      comparison: 'Loop’s ambiguous post invites a quick public reaction. Its thread explores the appeal and pressure of joining a group.',
+      comparison: 'The simulated ambiguous post invites a quick public reaction. Its thread explores the appeal and pressure of joining a group.',
       difference: 'This invented argument is peer conflict, not a state-organized ritual enforced through political terror.',
       sourceIds: ['orwell-part-one']
     }
@@ -103,32 +103,32 @@ window.TelescreenResearch = {
     },
     contacts: {
       title: 'Connection has a data cost',
-      text: 'Facebook documents contact uploading and ways to manage or delete uploaded contacts. Loop turns that choice into faster friend suggestions from a fictional address book; manual search leaves that book unshared. Stopping future uploads and deleting earlier uploads are separate actions. This game never accesses your contacts.',
+      text: 'Facebook documents contact uploading and ways to manage or delete uploaded contacts. This Instagram simulation turns that choice into faster friend suggestions from a fictional address book; manual search leaves that book unshared. Stopping future uploads and deleting earlier uploads are separate actions. This game never accesses your contacts.',
       sourceIds: ['meta-contacts']
     },
     personalization: {
       title: 'Useful does not mean data-free',
-      text: 'Meta says activity supplied by other businesses can personalize ads and, under its 2026 rollout, other content. Its revised control governs that use. Loop simplifies this into an optional partner-activity choice. Declining works in the story, while ordinary actions inside Loop can still shape its feed.',
+      text: 'Meta says activity supplied by other businesses can personalize ads and, under its 2026 rollout, other content. Its revised control governs that use. The game simplifies this into an optional partner-activity choice. Declining works in the story, while ordinary actions in the simulation can still shape its feed.',
       sourceIds: ['meta-partner-controls', 'meta-ranking']
     },
     behavior: {
       title: 'An action can become a guess',
-      text: 'Meta describes ranking systems that combine behavior and feedback to predict useful content. A like or save is evidence of an action, not proof of a lasting interest. Loop’s categories are tentative guesses from this playthrough, with deliberately simple rules. They do not describe your real personality or beliefs.',
+      text: 'Meta describes ranking systems that combine behavior and feedback to predict useful content. A like or save is evidence of an action, not proof of a lasting interest. The game’s categories are tentative guesses from this playthrough, with deliberately simple rules. They do not describe your real personality or beliefs.',
       sourceIds: ['meta-ranking']
     },
     ads: {
       title: 'One possible route from shop to ad',
-      text: 'Businesses can connect website activity to Meta through tools such as the Meta Pixel and Conversions API. Depending on applicable controls, business-supplied activity can inform personalized ads. Loop’s immediate matching ad simplifies that pathway; it is not a guaranteed sequence. The story’s student character is 18: Meta documents different teen rules, including excluding teens’ engagement from ad selection.',
+      text: 'Businesses can connect website activity to Meta through tools such as the Meta Pixel and Conversions API. Depending on applicable controls, business-supplied activity can inform personalized ads. The game’s immediate matching ad simplifies that pathway; it is not a guaranteed sequence. The story’s student character is 18: Meta documents different teen rules, including excluding teens’ engagement from ad selection.',
       sourceIds: ['meta-business-tools', 'meta-partner-controls', 'meta-teen-ads']
     },
     audience: {
       title: 'Visible to whom?',
-      text: 'Facebook offers audience selection; Instagram supports approving followers. These can meaningfully limit who sees a post, although tagging and other sharing contexts matter. Choosing an audience is different from controlling the platform’s data processing. Loop’s classmates and their reactions are fictional, and its restricted audience genuinely limits delivery.',
+      text: 'Facebook offers audience selection; Instagram supports approving followers. These can meaningfully limit who sees a post, although tagging and other sharing contexts matter. Choosing an audience is different from controlling the platform’s data processing. The classmates and their reactions are fictional, and the game’s restricted audience genuinely limits simulated delivery.',
       sourceIds: ['meta-audience']
     },
     settings: {
       title: 'A boundary can still matter',
-      text: 'Meta’s June 2026 announcement replaces the separate off-Meta disconnect setting with an expanded “Activity from other businesses” use control, through a regional rollout. It does not promise to stop receiving business events or erase history. Real controls vary by region, age, and product. Loop’s settings are simplified; its record distinguishes earlier activity from what you stop sharing next.',
+      text: 'Meta’s June 2026 announcement replaces the separate off-Meta disconnect setting with an expanded “Activity from other businesses” use control, through a regional rollout. It does not promise to stop receiving business events or erase history. Real controls vary by region, age, and product. The game’s settings are simplified; its record distinguishes earlier activity from what you stop sharing next.',
       sourceIds: ['meta-partner-controls', 'meta-teen-ads', 'meta-contacts']
     }
   }
