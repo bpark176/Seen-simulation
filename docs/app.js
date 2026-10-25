@@ -132,7 +132,7 @@
   }
   function openDialog(contents) {
     opener=document.activeElement;
-    dialog.innerHTML=`<div class="dialog-top"><span class="eyebrow red">TELESCREEN / READER’S NOTES</span><button class="close-dialog" data-action="close" aria-label="Close dialog">×</button></div>${contents}`;
+    dialog.innerHTML=`<div class="dialog-top"><span class="eyebrow red">SEEN / READER’S NOTES</span><button class="close-dialog" data-action="close" aria-label="Close dialog">×</button></div>${contents}`;
     dialog.showModal();
   }
   function connection() {

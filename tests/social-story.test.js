@@ -200,13 +200,13 @@ const namedActions = { id: 'browse', payload: { actions: { trail: 'like', art: '
 for (const { input, expected } of nameCases) {
   const namedStart = game.initialState(input);
   assert.equal(namedStart.playerName, expected);
-  assert(game.scene(namedStart).context.includes(expected + ', an 18-year-old student.'));
+  assert(game.scene(namedStart).context.includes(expected + ', a 16-year-old student.'));
   const connected = play(['sync', 'allow', namedActions, 'visit', 'publish', 'context', 'keep', 'attend'], input);
   const connectedProfile = game.profile(connected);
   assert.equal(connected.playerName, expected);
   assert.equal(connectedProfile.playerName, expected);
   assert.equal(connected.explicitData[0].label, expected + '’s basic profile');
-  assert(connected.explicitData[0].detail.startsWith(expected + ', age 18, student;'));
+  assert(connected.explicitData[0].detail.startsWith(expected + ', age 16, student;'));
   assert(connected.partnerEvents.every(event => event.detail.includes(expected + '’s account')));
   assert(connected.privacyChoices.find(item => item.id === 'partner-choice').detail.includes(expected));
   assert(connectedProfile.summary.startsWith(expected + '’s day'));

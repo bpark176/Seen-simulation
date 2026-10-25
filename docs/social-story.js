@@ -39,7 +39,7 @@
     const outside = state.account === false;
     const scenes = [
       () => ({ id: 'join', time: '07:18', title: 'Everyone is already there.',
-        context: 'Maya and Eli are organizing the class fundraiser through Instagram. You are ' + playerName + ', an 18-year-old student.',
+        context: 'Maya and Eli are organizing the class fundraiser through Instagram. You are ' + playerName + ', a 16-year-old student.',
         messages: [m('Maya', 'The plan is in our Instagram group. Join us? I can text you updates too.'), m('Eli', 'The playlist vote is there. Finding everyone is easier with contact matching.')],
         prompt: 'How will you join the conversation?',
         choices: [c('sync', 'Join and sync contacts', 'Find Maya and Eli automatically.'), c('manual', 'Join without syncing', 'Find your friends by name.'), c('outside', 'Stay with text messages', 'Ask Maya to relay updates.')],
@@ -116,7 +116,7 @@
     switch (current.id) {
       case 'join':
         next.account = id !== 'outside'; next.contactsSynced = id === 'sync'; next.flags.join = id;
-        if (next.account) next.explicitData.push(entry('account', playerName + '’s basic profile', playerName + ', age 18, student; membership in the class fundraiser group. These are fictional signup details.'));
+        if (next.account) next.explicitData.push(entry('account', playerName + '’s basic profile', playerName + ', age 16, student; membership in the class fundraiser group. These are fictional signup details.'));
         if (id === 'sync') {
           next.explicitData.push(entry('contacts', 'Contact matching', 'The story’s fictional address-book entries for Maya and Eli were shared with Instagram.'));
           outcome('Your people appear.', 'Instagram finds Maya and Eli immediately. The group plan and playlist vote are one tap away. The shortcut also places the fictional contact list in Instagram’s record. That exchange feels small because the benefit arrives first.', 'Maya: Found you! The plan is pinned.');

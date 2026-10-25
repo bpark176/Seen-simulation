@@ -54,7 +54,7 @@ window.TelescreenResearch = {
       "url": "https://about.fb.com/news/2023/01/age-appropriate-ads-for-teens/",
       "publisher": "Meta Newsroom",
       "date": "10 January 2023; updated 18 January 2023",
-      "summary": "Meta says teen ad targeting is limited to age and location and that teens’ engagement does not inform the ads they see. The game’s 18-year-old character and simplified advertising example do not represent a Meta teen account.",
+      "summary": "Meta says teen ad targeting is limited to age and location and that teens’ engagement does not inform the ads they see. The game’s 16-year-old character encounters invented advertising scenarios; these outcomes do not describe Instagram’s teen ad targeting.",
       "sortKey": "Continuing to Create",
       "citationHtml": "“Continuing to Create Age-Appropriate Ad Experiences for Teens.” <i>Meta Newsroom</i>, 18 Jan. 2023,",
       "accessed": "25 Oct. 2026"
@@ -183,7 +183,7 @@ window.TelescreenResearch = {
     },
     ads: {
       title: 'One possible route from shop to ad',
-      text: 'Businesses can connect website activity to Meta through tools such as the Meta Pixel and Conversions API. Depending on applicable controls, business-supplied activity can inform personalized ads. The game’s immediate matching ad simplifies that pathway; it is not a guaranteed sequence. The story’s student character is 18: Meta documents different teen rules, including excluding teens’ engagement from ad selection.',
+      text: 'The student is 16. Shopping-based ads in this game are invented teaching examples, not a depiction of Instagram’s teen ad rules: Meta says teen ad selection uses age and location, not engagement. Businesses can connect website activity to Meta through the Meta Pixel and Conversions API; where applicable, that data can inform personalized ads. The game simplifies this broader mechanism.',
       sourceIds: ['meta-business-tools', 'meta-partner-controls', 'meta-teen-ads']
     },
     audience: {
