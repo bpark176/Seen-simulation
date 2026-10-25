@@ -1,8 +1,8 @@
-/* Research notes for Seen, a fictional social platform. No external requests are made here. */
+/* Research notes for the educational Instagram simulation. No external requests are made here. */
 window.TelescreenResearch = {
   checkedAt: '2026-10-25',
   checkedLabel: 'Sources checked 25 October 2026',
-  framing: 'This project argues that when social plans, useful recommendations, and convenient features come together, sharing data can start to feel like the ordinary price of participation. Seen is a fictional social platform that makes that trade-off visible through invented characters, events, and simplified controls. Instagram and Facebook provide researched comparisons, not exact models for the game. Commercial profiling and peer pressure differ from the Party’s violent, compulsory political control.',
+  framing: 'This project argues that when social plans, useful recommendations, and convenient features come together, sharing data can start to feel like the ordinary price of participation. This educational Instagram simulation makes that trade-off visible through invented characters, events, and simplified controls. Instagram and Facebook provide researched comparisons; the game does not reproduce their actual algorithms or controls. Commercial profiling and peer pressure differ from the Party’s violent, compulsory political control.',
   sources: [
     {
       "id": "acquisti-privacy",
@@ -54,7 +54,7 @@ window.TelescreenResearch = {
       "url": "https://about.fb.com/news/2023/01/age-appropriate-ads-for-teens/",
       "publisher": "Meta Newsroom",
       "date": "10 January 2023; updated 18 January 2023",
-      "summary": "Meta says teen ad targeting is limited to age and location and that teens’ engagement does not inform the ads they see. Seen’s 16-year-old character encounters invented advertising scenarios; these outcomes do not describe Instagram’s teen ad targeting.",
+      "summary": "Meta says teen ad targeting is limited to age and location and that teens’ engagement does not inform the ads they see. The game’s 16-year-old character encounters invented advertising scenarios; these outcomes do not describe Instagram’s teen ad targeting.",
       "sortKey": "Continuing to Create",
       "citationHtml": "“Continuing to Create Age-Appropriate Ad Experiences for Teens.” <i>Meta Newsroom</i>, 18 Jan. 2023,",
       "accessed": "25 Oct. 2026"
@@ -168,7 +168,7 @@ window.TelescreenResearch = {
     },
     contacts: {
       title: 'Connection has a data cost',
-      text: 'Facebook documents contact uploading and ways to manage or delete uploaded contacts. Seen turns that choice into faster friend suggestions from a fictional address book; manual search leaves that book unshared. Stopping future uploads and deleting earlier uploads are separate actions. This game never accesses your contacts.',
+      text: 'Facebook documents contact uploading and ways to manage or delete uploaded contacts. This Instagram simulation turns that choice into faster friend suggestions from a fictional address book; manual search leaves that book unshared. Stopping future uploads and deleting earlier uploads are separate actions. This game never accesses your contacts.',
       sourceIds: ['meta-contacts']
     },
     personalization: {
@@ -183,7 +183,7 @@ window.TelescreenResearch = {
     },
     ads: {
       title: 'One possible route from shop to ad',
-      text: 'The student is 16. Shopping-based ads on fictional Seen are invented teaching examples, not a depiction of Instagram’s teen ad rules: Meta says teen ad selection uses age and location, not engagement. Businesses can connect website activity to Meta through the Meta Pixel and Conversions API; where applicable, that data can inform personalized ads. The game simplifies this broader mechanism.',
+      text: 'The student is 16. Shopping-based ads in this game are invented teaching examples, not a depiction of Instagram’s teen ad rules: Meta says teen ad selection uses age and location, not engagement. Businesses can connect website activity to Meta through the Meta Pixel and Conversions API; where applicable, that data can inform personalized ads. The game simplifies this broader mechanism.',
       sourceIds: ['meta-business-tools', 'meta-partner-controls', 'meta-teen-ads']
     },
     audience: {

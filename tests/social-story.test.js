@@ -215,7 +215,7 @@ for (const { input, expected } of nameCases) {
   assert(declined.result.text.includes(expected + '’s account'));
   const outsideNamed = play(['outside', 'decline', namedActions, 'visit', 'publish', 'private', 'reduce', 'quiet'], input);
   assert(outsideNamed.postingDecisions[0].detail.includes('No account for ' + expected + ' was created.'));
-  assert(game.profile(outsideNamed).summary.startsWith(expected + ' stayed outside Seen.'));
+  assert(game.profile(outsideNamed).summary.startsWith(expected + ' stayed outside Instagram.'));
   assert.equal(game.profile(outsideNamed).playerName, expected);
   assert(!JSON.stringify(outsideNamed).includes('Alex'));
   assert.deepEqual(game.initialState(), initial, 'Reset must discard the previous custom name.');
