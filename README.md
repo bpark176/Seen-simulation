@@ -3,9 +3,9 @@
 Brennan Park · English 11 · B1
 1984 Creative Summative Project
 
-- **Website:** https://bpark176.github.io/Seen-simulation/
-- **Repository:** https://github.com/bpark176/Seen-simulation
-- **Optional literary comparison:** https://bpark176.github.io/Seen-simulation/comparison.html
+- **Website:** https://bpark176.github.io/seen-simulation/
+- **Repository:** https://github.com/bpark176/seen-simulation
+- **Optional literary comparison:** https://bpark176.github.io/seen-simulation/comparison.html
 
 The main experience critiques how social media normalizes exchanging data for convenience, personalization, and social connection. The player enters a name or nickname, then plays a 16-year-old student making eight decisions around Seen, a fictional social platform. The final **Your Digital Profile** separates explicit information, observed activity, uncertain interest inferences, partner events, recommendations/ads, posting decisions, and privacy boundaries. It uses no loyalty score. Privacy choices genuinely affect later simulated collection, and the no-account route remains playable through a friend's text relay.
 
