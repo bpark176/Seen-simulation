@@ -1,6 +1,6 @@
 # The Price of Staying Connected
 
-Brennan Park · English 11 · B1 — Borst
+Brennan Park · English 11 · B1
 1984 Creative Summative Project
 
 - **Website:** https://bpark176.github.io/telescreen-simulation/
