@@ -82,7 +82,7 @@ window.TelescreenResearch = {
       chapter: 'Part One, Chapter 1',
       title: 'An audience changes the draft',
       original: 'Before facing the telescreen, Winston deliberately arranges his expression to appear reassuringly positive.',
-      comparison: 'Alex may revise a harmless opinion after noticing classmates and family in its audience. Anticipated reactions can influence expression.',
+      comparison: 'The player may revise a harmless opinion after noticing classmates and family in its audience. Anticipated reactions can influence expression.',
       difference: 'Here the pressure comes from peers. The game does not claim that advertising systems punish disagreement.',
       sourceIds: ['orwell-part-one', 'meta-audience']
     },
@@ -118,7 +118,7 @@ window.TelescreenResearch = {
     },
     ads: {
       title: 'One possible route from shop to ad',
-      text: 'Businesses can connect website activity to Meta through tools such as the Meta Pixel and Conversions API. Depending on applicable controls, business-supplied activity can inform personalized ads. Loop’s immediate matching ad simplifies that pathway; it is not a guaranteed sequence. Alex is 18: Meta documents different teen rules, including excluding teens’ engagement from ad selection.',
+      text: 'Businesses can connect website activity to Meta through tools such as the Meta Pixel and Conversions API. Depending on applicable controls, business-supplied activity can inform personalized ads. Loop’s immediate matching ad simplifies that pathway; it is not a guaranteed sequence. The story’s student character is 18: Meta documents different teen rules, including excluding teens’ engagement from ad selection.',
       sourceIds: ['meta-business-tools', 'meta-partner-controls', 'meta-teen-ads']
     },
     audience: {

@@ -26,6 +26,7 @@ const completionExamples = {};
 
 function invariant(state) {
   assert.equal(state.history.length, state.step);
+  assert.equal(state.playerName, 'Alex', 'Default routes retain the backwards-compatible name.');
   assert(!Object.prototype.hasOwnProperty.call(state, 'score'), 'The contemporary story has no loyalty or morality score.');
   assert(['friends', 'close'].includes(state.audience));
   if (state.account === false) {
@@ -93,6 +94,7 @@ function visit(state, routeWordCount) {
     assert.throws(() => game.choose(state, 'attend'));
     const p = game.profile(state);
     assert.equal(p.title, 'Your Digital Profile');
+    assert.equal(p.playerName, state.playerName);
     const mapping = { shared: 'explicitData', interests: 'inferredInterests', partnerActivity: 'partnerEvents', feed: 'feedChanges', ads: 'adChanges', posts: 'postingDecisions', privacy: 'privacyChoices', social: 'socialChoices' };
     for (const [profileKey, stateKey] of Object.entries(mapping)) {
       assert.deepEqual(p[profileKey], state[stateKey], 'Profile must use actual route data.');
@@ -154,8 +156,8 @@ visit(game.initialState(), 0);
 assert.equal(routes, 25920);
 assert(outsideRoutes > 0 && reducedRoutes > 0 && linkedRoutes > 0);
 
-function play(sequence) {
-  return sequence.reduce((state, item) => typeof item === 'string' ? game.choose(state, item) : game.choose(state, item.id, item.payload), game.initialState());
+function play(sequence, name) {
+  return sequence.reduce((state, item) => typeof item === 'string' ? game.choose(state, item) : game.choose(state, item.id, item.payload), game.initialState(name));
 }
 const preActivity = play(['manual', 'decline']);
 const badPayloads = [undefined, null, {}, { actions: null }, { actions: {} }, { actions: [] }, { actions: { trail: 'like', art: 'save' } }, { actions: { trail: 'like', art: 'save', music: 'unknown' } }, { actions: { trail: 'like', art: 'save', music: 'skip', extra: 'like' } }];
@@ -179,4 +181,43 @@ assert.equal(reduced.postingDecisions[0].audience, 'friends', 'Changing the next
 const newGame = game.initialState();
 newGame.history.push({}); newGame.permissions.partnerActivity = true; newGame.flags.changed = true;
 assert.deepEqual(game.initialState(), initial);
+
+// Names are plain local story data. Rendering escapes them at the UI boundary.
+assert.equal(game.normalizePlayerName(' \t\n '), '');
+assert.equal(game.normalizePlayerName(null), '');
+assert.equal(game.normalizePlayerName(undefined), '');
+assert.equal(game.normalizePlayerName('  A\u0000  B\t C\u007f '), 'A B C');
+assert.equal(game.initialState(' \n ').playerName, 'Alex');
+assert.equal(game.initialState().playerName, 'Alex');
+assert.equal(game.normalizePlayerName('🌿'.repeat(41)), '🌿'.repeat(40));
+assert.equal(Array.from(game.initialState('🌿'.repeat(41)).playerName).length, 40);
+const nameCases = [
+  { input: '  지민   O’Connor\n🌿 ', expected: '지민 O’Connor 🌿' },
+  { input: "  D’Arcy  O'Neil  ", expected: "D’Arcy O'Neil" },
+  { input: '<img src=x onerror=alert(1)>', expected: '<img src=x onerror=alert(1)>' }
+];
+const namedActions = { id: 'browse', payload: { actions: { trail: 'like', art: 'save', music: 'skip' } } };
+for (const { input, expected } of nameCases) {
+  const namedStart = game.initialState(input);
+  assert.equal(namedStart.playerName, expected);
+  assert(game.scene(namedStart).context.includes(expected + ', an 18-year-old student.'));
+  const connected = play(['sync', 'allow', namedActions, 'visit', 'publish', 'context', 'keep', 'attend'], input);
+  const connectedProfile = game.profile(connected);
+  assert.equal(connected.playerName, expected);
+  assert.equal(connectedProfile.playerName, expected);
+  assert.equal(connected.explicitData[0].label, expected + '’s basic profile');
+  assert(connected.explicitData[0].detail.startsWith(expected + ', age 18, student;'));
+  assert(connected.partnerEvents.every(event => event.detail.includes(expected + '’s account')));
+  assert(connected.privacyChoices.find(item => item.id === 'partner-choice').detail.includes(expected));
+  assert(connectedProfile.summary.startsWith(expected + '’s day'));
+  assert(!JSON.stringify(connected).includes('Alex'), 'No default-name remnants may appear in a named playthrough.');
+  const declined = play(['manual', 'decline', namedActions, 'visit'], input);
+  assert(declined.result.text.includes(expected + '’s account'));
+  const outsideNamed = play(['outside', 'decline', namedActions, 'visit', 'publish', 'private', 'reduce', 'quiet'], input);
+  assert(outsideNamed.postingDecisions[0].detail.includes('No account for ' + expected + ' was created.'));
+  assert(game.profile(outsideNamed).summary.startsWith(expected + ' stayed outside Loop.'));
+  assert.equal(game.profile(outsideNamed).playerName, expected);
+  assert(!JSON.stringify(outsideNamed).includes('Alex'));
+  assert.deepEqual(game.initialState(), initial, 'Reset must discard the previous custom name.');
+}
 console.log(JSON.stringify({ passed: true, statesVisited: visited, completeRoutes: routes, decisionsPerRoute: 8, outsideRoutes, reducedRoutes, routesWithLinkedVisits: linkedRoutes, engineWordsWithoutWidgetsOrProfile: { min: minimumWords, max: maximumWords }, completionExamples }, null, 2));

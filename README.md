@@ -7,11 +7,11 @@ Brennan Park · English 11 · B1 — Borst
 - **Repository:** https://github.com/bpark176/telescreen-simulation
 - **Optional literary comparison:** https://bpark176.github.io/telescreen-simulation/comparison.html
 
-The main experience critiques how social media normalizes exchanging data for convenience, personalization, and social connection. Alex, an 18-year-old student, makes eight decisions in the fictional app Loop. The final **Your Digital Profile** separates explicit information, observed activity, uncertain interest inferences, partner events, recommendations/ads, posting decisions, and privacy boundaries. It uses no loyalty score. Privacy choices genuinely affect later simulated collection, and the no-account route remains playable through a friend's text relay.
+The main experience critiques how social media normalizes exchanging data for convenience, personalization, and social connection. The player enters a name or nickname, then plays an 18-year-old student making eight decisions in the fictional app Loop. The final **Your Digital Profile** separates explicit information, observed activity, uncertain interest inferences, partner events, recommendations/ads, posting decisions, and privacy boundaries. It uses no loyalty score. Privacy choices genuinely affect later simulated collection, and the no-account route remains playable through a friend's text relay.
 
 Instagram and Facebook are researched examples, not the game's interface or algorithm. The accessible Real-World Evidence section distinguishes the FTC's 2024 report, Meta's June 2026 update, age/region differences, and the limits of the comparison to the Party's violent compulsory control. All literary references are from Part One. The original nine-decision literary adaptation and its invented Party score remain optional.
 
-Everything is simulated. There are no account logins, analytics, third-party game services, API keys, storage, or real device permission requests. Choices live only in page memory; replay, home, or refresh resets them.
+Everything is simulated. There are no account logins, analytics, third-party game services, API keys, storage, or real device permission requests. The chosen name and choices live only in page memory; restart, replay, home, or refresh clears them. Name entry accepts up to 40 characters, supports Unicode, and is rendered as text.
 
 ## Files
 

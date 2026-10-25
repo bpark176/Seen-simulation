@@ -17,9 +17,15 @@
   const c = (id, label, detail, reason) => ({ id, label, detail, ...(reason ? { disabled: true, reason } : {}) });
   const entry = (id, label, detail, extra = {}) => ({ id, label, detail, ...extra });
 
-  function initialState() {
+  function normalizePlayerName(value) {
+    if (typeof value !== 'string') return '';
+    const normalized = value.replace(/\s+/gu, ' ').replace(/[\u0000-\u001f\u007f-\u009f]/g, '').replace(/ +/g, ' ').trim();
+    return Array.from(normalized).slice(0, 40).join('').trim();
+  }
+
+  function initialState(name) {
     return {
-      step: 0, account: null, contactsSynced: false,
+      step: 0, playerName: normalizePlayerName(name) || 'Alex', account: null, contactsSynced: false,
       permissions: { partnerActivity: false }, audience: 'friends',
       explicitData: [], activity: [], inferredInterests: [], partnerEvents: [],
       feedChanges: [], adChanges: [], postingDecisions: [], privacyChoices: [],
@@ -29,10 +35,11 @@
 
   function scene(state) {
     if (!Number.isInteger(state.step) || state.step < 0 || state.step >= TOTAL_STEPS) return null;
+    const playerName = normalizePlayerName(state.playerName) || 'Alex';
     const outside = state.account === false;
     const scenes = [
       () => ({ id: 'join', time: '07:18', title: 'Everyone is already there.',
-        context: 'Maya and Eli are organizing the class fundraiser through Loop. You are Alex, an 18-year-old student.',
+        context: 'Maya and Eli are organizing the class fundraiser through Loop. You are ' + playerName + ', an 18-year-old student.',
         messages: [m('Maya', 'The plan is in our Loop group. Join us? I can text you updates too.'), m('Eli', 'The playlist vote is there. Finding everyone is easier with contact matching.')],
         prompt: 'How will you join the conversation?',
         choices: [c('sync', 'Join and sync contacts', 'Find Maya and Eli automatically.'), c('manual', 'Join without syncing', 'Find your friends by name.'), c('outside', 'Stay with text messages', 'Ask Maya to relay updates.')],
@@ -84,7 +91,8 @@
 
   function addAd(state, id, product, visited, step) {
     const linked = Boolean(visited && state.account && state.permissions.partnerActivity);
-    if (linked) state.partnerEvents.push(entry(id + '-event', product === 'headphones' ? 'Soundroom product visit' : 'Event-supply product visit', product === 'headphones' ? 'The Arc headphones visit was associated with Alex’s account while optional partner use was on.' : 'The later supply-shop visit was associated with Alex’s account because optional partner use was still on.', { product, step, usedForAds: true }));
+    const playerName = normalizePlayerName(state.playerName) || 'Alex';
+    if (linked) state.partnerEvents.push(entry(id + '-event', product === 'headphones' ? 'Soundroom product visit' : 'Event-supply product visit', product === 'headphones' ? 'The Arc headphones visit was associated with ' + playerName + '’s account while optional partner use was on.' : 'The later supply-shop visit was associated with ' + playerName + '’s account because optional partner use was still on.', { product, step, usedForAds: true }));
     state.adChanges.push(entry(id + '-ad', linked ? (product === 'headphones' ? 'Arc headphones: a related ad' : 'Event supplies: a related ad') : 'Community café: a contextual ad', linked ? 'This fictional ad uses the permitted partner visit. The match is explained by that event, not by private speech.' : visited ? 'The shop visit was not associated with a Loop account. This general event-page ad does not use that visit.' : 'No shop visit occurred. This general event-page ad does not come from a shopping event.', { linked, product: linked ? product : 'cafe', step }));
     return linked;
   }
@@ -100,13 +108,15 @@
       if (!a || typeof a !== 'object' || Array.isArray(a) || Object.keys(a).length !== 3 || activityCards.some(card => !Object.prototype.hasOwnProperty.call(a, card.id) || !['like', 'save', 'skip'].includes(a[card.id]))) throw new Error('Choose like, save, or skip for each of trail, art, and music.');
     }
     const next = copy(state);
+    const playerName = normalizePlayerName(state.playerName) || 'Alex';
+    next.playerName = playerName;
     const outside = next.account === false;
     let result;
     const outcome = (title, text, notification) => { result = { title, text, ...(notification ? { notification } : {}) }; };
     switch (current.id) {
       case 'join':
         next.account = id !== 'outside'; next.contactsSynced = id === 'sync'; next.flags.join = id;
-        if (next.account) next.explicitData.push(entry('account', 'Alex’s basic profile', 'Alex, age 18, student; membership in the class fundraiser group. These are fictional signup details.'));
+        if (next.account) next.explicitData.push(entry('account', playerName + '’s basic profile', playerName + ', age 18, student; membership in the class fundraiser group. These are fictional signup details.'));
         if (id === 'sync') {
           next.explicitData.push(entry('contacts', 'Contact matching', 'The story’s fictional address-book entries for Maya and Eli were shared with Loop.'));
           outcome('Your people appear.', 'Loop finds Maya and Eli immediately. The group plan and playlist vote are one tap away. The shortcut also places the fictional contact list in Loop’s record. That exchange feels small because the benefit arrives first.', 'Maya: Found you! The plan is pinned.');
@@ -121,7 +131,7 @@
         break;
       case 'personalize':
         next.permissions.partnerActivity = id === 'allow' && next.account === true;
-        next.privacyChoices.push(entry('partner-choice', next.permissions.partnerActivity ? 'Optional partner use allowed' : 'Optional partner use declined', next.permissions.partnerActivity ? 'Future simulated partner-shop visits may be associated with Alex’s account for related ads.' : 'Future partner visits remain unassociated unless this option is later enabled. This is Loop’s fictional rule.'));
+        next.privacyChoices.push(entry('partner-choice', next.permissions.partnerActivity ? 'Optional partner use allowed' : 'Optional partner use declined', next.permissions.partnerActivity ? 'Future simulated partner-shop visits may be associated with ' + playerName + '’s account for related ads.' : 'Future partner visits remain unassociated unless this option is later enabled. This is Loop’s fictional rule.'));
         outcome(next.permissions.partnerActivity ? 'A useful shortcut, with a link.' : 'The choice takes effect.', next.permissions.partnerActivity ? 'Future participating-shop visits can help Loop select relevant ads. You did not need this permission to message friends. A convenient suggestion may now carry information from a different app into the same account.' : outside ? 'The preview stays unlinked. No account or partner permission has been created. Maya’s messages still get through by text; you have accepted some extra coordination rather than an automatic signup.' : 'Optional partner association stays off. Messaging still works, and likes or saves inside Loop can still shape recommendations. The boundary is specific: it limits this extra connection, not every kind of activity the app can observe.');
         break;
       case 'activity': {
@@ -143,7 +153,7 @@
       case 'shop': {
         const visited = id === 'visit'; next.flags.shopVisited = visited;
         const linked = addAd(next, 'headphones', 'headphones', visited, state.step);
-        outcome(linked ? 'The product returns.' : 'No shopping link is made.', linked ? 'Back in Loop, Arc headphones appear in an ad. This time there is a specific explanation: the simulated Soundroom visit was associated with your account under the optional setting. A similar ad alone would not prove the same mechanism elsewhere.' : visited ? 'You viewed the headphones, then saw a general café ad. Loop did not associate the shop visit with Alex’s account in this playthrough. Your permission choice genuinely changed the mechanism; it did not make all advertising disappear.' : 'You never opened the product page, so there is no headphone visit to connect. A general café ad appears beside the event content. Not every ad match or coincidence demonstrates cross-app tracking.');
+        outcome(linked ? 'The product returns.' : 'No shopping link is made.', linked ? 'Back in Loop, Arc headphones appear in an ad. This time there is a specific explanation: the simulated Soundroom visit was associated with your account under the optional setting. A similar ad alone would not prove the same mechanism elsewhere.' : visited ? 'You viewed the headphones, then saw a general café ad. Loop did not associate the shop visit with ' + playerName + '’s account in this playthrough. Your permission choice genuinely changed the mechanism; it did not make all advertising disappear.' : 'You never opened the product page, so there is no headphone visit to connect. A general café ad appears beside the event content. Not every ad match or coincidence demonstrates cross-app tracking.');
         break;
       }
       case 'post': {
@@ -154,7 +164,7 @@
         const channel = outside ? 'Maya’s text relay' : 'Loop';
         const labels = { publish: 'Original opinion shared', close: 'Original opinion limited', revise: 'Opinion revised before sharing', withhold: 'Opinion withheld' };
         const details = {
-          publish: outside ? 'With your permission, Maya relayed the exact draft to the class group. No Alex account was created.' : 'The exact draft went to your friends list, including classmates and family.',
+          publish: outside ? 'With your permission, Maya relayed the exact draft to the class group. No account for ' + playerName + ' was created.' : 'The exact draft went to your friends list, including classmates and family.',
           close: outside ? 'The original wording stayed in texts with Maya and Eli; Maya was asked not to relay it to the class group.' : 'The original wording went only to Maya and Eli. This limits initial recipients, not possible screenshots.',
           revise: 'You replaced “' + DRAFT + '” with “' + REVISION + '” before ' + (outside ? 'asking Maya to relay it to the class group.' : 'sharing with friends, classmates, and family.'),
           withhold: 'The draft was neither sent nor published. This private decision is only in your local playthrough record.'
@@ -225,9 +235,10 @@
 
   function profile(state) {
     const outside = state.account === false;
+    const playerName = normalizePlayerName(state.playerName) || 'Alex';
     return copy({
-      title: 'Your Digital Profile', account: state.account,
-      summary: outside ? 'Alex stayed outside Loop. The app received no account profile, uploaded preview responses, or linked shop visits. This local record still shows the choices, text relays, and extra coordination that kept the day connected.' : 'Alex’s day left explicit information, selected activity, and possible interpretations. Each entry below comes from a choice you actually made. The guesses are uncertain, and the record does not diagnose your real personality or beliefs.',
+      title: 'Your Digital Profile', playerName, account: state.account,
+      summary: outside ? playerName + ' stayed outside Loop. The app received no account profile, uploaded preview responses, or linked shop visits. This local record still shows the choices, text relays, and extra coordination that kept the day connected.' : playerName + '’s day left explicit information, selected activity, and possible interpretations. Each entry below comes from a choice you actually made. The guesses are uncertain, and the record does not diagnose your real personality or beliefs.',
       shared: state.explicitData,
       activity: state.activity.filter(item => item.retained),
       interests: state.inferredInterests,
@@ -239,5 +250,5 @@
       social: state.socialChoices
     });
   }
-  return { TOTAL_STEPS, DRAFT, REVISION, activityCards: copy(activityCards), initialState, scene, choose, profile };
+  return { TOTAL_STEPS, DRAFT, REVISION, activityCards: copy(activityCards), normalizePlayerName, initialState, scene, choose, profile };
 });
