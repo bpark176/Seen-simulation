@@ -169,7 +169,7 @@ const allLikeOutside = play(['outside', 'decline', { id: 'browse', payload: { ac
 assert.equal(allLikeOutside.account, false);
 assert.equal(allLikeOutside.partnerEvents.length, 0);
 assert.equal(allLikeOutside.inferredInterests.length, 0);
-assert.equal(allLikeOutside.postingDecisions[0].channel, 'Maya’s text relay');
+assert.equal(allLikeOutside.postingDecisions[0].channel, 'Jasmine’s text relay');
 const twoVisits = play(['sync', 'allow', { id: 'browse', payload: { actions: { trail: 'like', art: 'save', music: 'skip' } } }, 'visit', 'revise', 'private', 'keep', 'attend']);
 assert.equal(twoVisits.partnerEvents.length, 2);
 const reduced = play(['sync', 'allow', { id: 'browse', payload: { actions: { trail: 'like', art: 'save', music: 'skip' } } }, 'visit', 'publish', 'private', 'reduce', 'attend']);

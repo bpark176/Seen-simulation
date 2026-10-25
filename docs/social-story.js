@@ -10,7 +10,7 @@
   const activityCards = [
     { id: 'trail', title: 'A walk before the weekend', text: 'A riverside route with room to slow down.', category: 'Outdoor activities' },
     { id: 'art', title: 'Make the fundraiser poster', text: 'An open studio with materials and a spare seat.', category: 'Creative workshops' },
-    { id: 'music', title: 'Eli’s after-school playlist', text: 'Three songs for setting up the courtyard.', category: 'Music' }
+    { id: 'music', title: 'Hannah’s after-school playlist', text: 'Three songs for setting up the courtyard.', category: 'Music' }
   ];
   const copy = value => JSON.parse(JSON.stringify(value));
   const m = (sender, text, kind = 'friend') => ({ sender, text, kind });
@@ -39,10 +39,10 @@
     const outside = state.account === false;
     const scenes = [
       () => ({ id: 'join', time: '07:18', title: 'Everyone is already there.',
-        context: 'Maya and Eli are organizing the class fundraiser through Instagram. You are ' + playerName + ', a 16-year-old student.',
-        messages: [m('Maya', 'The plan is in our Instagram group. Join us? I can text you updates too.'), m('Eli', 'The playlist vote is there. Finding everyone is easier with contact matching.')],
+        context: 'Jasmine and Hannah are organizing the class fundraiser through Instagram. You are ' + playerName + ', a 16-year-old student.',
+        messages: [m('Jasmine', 'The plan is in our Instagram group. Join us? I can text you updates too.'), m('Hannah', 'The playlist vote is there. Finding everyone is easier with contact matching.')],
         prompt: 'How will you join the conversation?',
-        choices: [c('sync', 'Join and sync contacts', 'Find Maya and Eli automatically.'), c('manual', 'Join without syncing', 'Find your friends by name.'), c('outside', 'Stay with text messages', 'Ask Maya to relay updates.')],
+        choices: [c('sync', 'Join and sync contacts', 'Find Jasmine and Hannah automatically.'), c('manual', 'Join without syncing', 'Find your friends by name.'), c('outside', 'Stay with text messages', 'Ask Jasmine to relay updates.')],
         connectionKey: 'monitoring', researchKey: 'contacts' }),
       () => ({ id: 'personalize', time: '08:05', title: 'An easier “For you.”',
         context: outside ? 'You are viewing a public preview. There is no Instagram account to connect to shopping activity.' : 'The main button promises more relevant suggestions. The optional setting is separate from messaging.',
@@ -51,39 +51,39 @@
         choices: [c('allow', 'Allow optional partner use', 'Connect later shop visits for relevant ads.', outside ? 'No Instagram account exists. This choice cannot silently create one.' : null), c('decline', outside ? 'Continue without an account' : 'Keep optional partner use off', outside ? 'Keep the preview unlinked.' : 'Keep messaging and ordinary recommendations.')],
         connectionKey: 'monitoring', researchKey: 'personalization' }),
       () => ({ id: 'activity', time: '10:20', title: 'A pattern from small actions.',
-        context: outside ? 'Maya sends a public preview. Your responses here stay local and create no Instagram interest profile.' : 'A useful feed starts with ordinary choices. You have not entered a list of interests.',
+        context: outside ? 'Jasmine sends a public preview. Your responses here stay local and create no Instagram interest profile.' : 'A useful feed starts with ordinary choices. You have not entered a list of interests.',
         messages: [], cards: copy(activityCards), prompt: 'Choose one response on each of the three cards.',
         choices: [c('browse', 'Continue with these choices', 'Likes and saves can become clues; skips add no interest in this game.')],
         connectionKey: 'monitoring', researchKey: 'behavior' }),
       () => ({ id: 'shop', time: '11:50', title: 'A product, then a feed.',
-        context: 'Eli shares a simulated Soundroom listing. Opening the preview is optional; no real store or purchase is involved.',
-        messages: [m('Eli', 'Arc headphones, $49. Could be useful for the commute. Want to look?')],
+        context: 'Hannah shares a simulated Soundroom listing. Opening the preview is optional; no real store or purchase is involved.',
+        messages: [m('Hannah', 'Arc headphones, $49. Could be useful for the commute. Want to look?')],
         prompt: 'Open the product page or keep going?',
         choices: [c('visit', 'Visit the simulated shop', 'View the Arc headphones listing.'), c('skip', 'Skip the shopping link', 'Return directly to the feed.')],
         connectionKey: 'monitoring', researchKey: 'ads' }),
       () => ({ id: 'post', time: '12:30', title: 'Who might read this?',
-        context: outside ? 'You draft a text for Maya. She can share it with the group only if you choose.' : 'The fundraiser’s dress-code discussion reaches your feed. You have a harmless opinion, and a mixed audience.',
-        messages: [m('Maya', 'I agree about keeping costs down. Some organizers might take the wording personally.')],
+        context: outside ? 'You draft a text for Jasmine. She can share it with the group only if you choose.' : 'The fundraiser’s dress-code discussion reaches your feed. You have a harmless opinion, and a mixed audience.',
+        messages: [m('Jasmine', 'I agree about keeping costs down. Some organizers might take the wording personally.')],
         prompt: 'What happens to your draft?',
-        choices: [c('publish', outside ? 'Let Maya share it' : 'Publish as written', 'Keep your exact words for the wider group.'), c('close', 'Limit it to Maya and Eli', 'Keep the original words; reduce the initial audience.'), c('revise', 'Soften and share it', 'Ask about a lower-cost option instead.'), c('withhold', 'Keep it unpublished', 'Do not send or publish the draft.')],
+        choices: [c('publish', outside ? 'Let Jasmine share it' : 'Publish as written', 'Keep your exact words for the wider group.'), c('close', 'Limit it to Jasmine and Hannah', 'Keep the original words; reduce the initial audience.'), c('revise', 'Soften and share it', 'Ask about a lower-cost option instead.'), c('withhold', 'Keep it unpublished', 'Do not send or publish the draft.')],
         connectionKey: 'expression', researchKey: 'audience' }),
       () => ({ id: 'thread', time: '14:10', title: 'The thread moves faster.',
-        context: outside ? 'Maya texts you a preview of replies to Eli. You can respond through her relay.' : 'Eli posts about the fundraiser’s cost. Replies treat it as an attack on the organizers.',
-        messages: [m('Maya', state.flags.post === 'withhold' ? 'You stayed out of the earlier debate. This one is getting personal.' : 'Nobody has asked what Eli meant yet. Everyone seems certain.')],
+        context: outside ? 'Jasmine texts you a preview of replies to Hannah. You can respond through her relay.' : 'Hannah posts about the fundraiser’s cost. Replies treat it as an attack on the organizers.',
+        messages: [m('Jasmine', state.flags.post === 'withhold' ? 'You stayed out of the earlier debate. This one is getting personal.' : 'Nobody has asked what Hannah meant yet. Everyone seems certain.')],
         prompt: 'How will you respond to the pile-on?',
-        choices: [c('pile_on', outside ? 'Agree with the criticism by text' : 'Join the criticism', 'Repeat the assumption that Eli is ungrateful.'), c('context', 'Ask what Eli meant', 'Make room for an explanation.'), c('private', 'Support Eli privately', 'Check in without entering the thread.'), c('disengage', 'Leave the thread', 'Protect your attention. Leave it unresolved.')],
+        choices: [c('pile_on', outside ? 'Agree with the criticism by text' : 'Join the criticism', 'Repeat the assumption that Hannah is ungrateful.'), c('context', 'Ask what Hannah meant', 'Make room for an explanation.'), c('private', 'Support Hannah privately', 'Check in without entering the thread.'), c('disengage', 'Leave the thread', 'Protect your attention. Leave it unresolved.')],
         connectionKey: 'crowd' }),
       () => ({ id: 'settings', time: '15:30', title: 'A boundary that works.',
-        context: outside ? 'You still have no Instagram account. You can also ask Maya to keep future relay messages within your close circle.' : 'Before the event, you review what is optional and what has already happened.',
+        context: outside ? 'You still have no Instagram account. You can also ask Jasmine to keep future relay messages within your close circle.' : 'Before the event, you review what is optional and what has already happened.',
         messages: [m('Instagram', outside ? 'No account-linked history exists. The preview has not created an account or uploaded your responses.' : 'Turn off future partner association and limit the next post’s audience. Earlier records and published posts will remain.', 'system')],
         prompt: 'Which settings will you carry forward?',
-        choices: [c('reduce', outside ? 'Keep the relay close' : 'Reduce optional sharing', outside ? 'No account; ask before forwarding beyond Maya and Eli.' : 'Partner use off. Next audience: close friends.'), c('keep', 'Keep the current choices', 'Preserve the settings you actually selected.')],
+        choices: [c('reduce', outside ? 'Keep the relay close' : 'Reduce optional sharing', outside ? 'No account; ask before forwarding beyond Jasmine and Hannah.' : 'Partner use off. Next audience: close friends.'), c('keep', 'Keep the current choices', 'Preserve the settings you actually selected.')],
         connectionKey: 'monitoring', researchKey: 'settings' }),
       () => ({ id: 'evening', time: '16:05', title: 'You still have a place.',
-        context: outside ? 'Maya sends the final courtyard plan by text. Staying outside Instagram has not cancelled your invitation.' : 'The updated plan is easy to find in the group. The data choices are still yours to change next time.',
-        messages: [m(outside ? 'Maya · text' : 'Maya · Instagram', 'Courtyard, 4:30. Bring what you can. The supply listing has snack ideas, but you don’t need to buy anything.')],
+        context: outside ? 'Jasmine sends the final courtyard plan by text. Staying outside Instagram has not cancelled your invitation.' : 'The updated plan is easy to find in the group. The data choices are still yours to change next time.',
+        messages: [m(outside ? 'Jasmine · text' : 'Jasmine · Instagram', 'Courtyard, 4:30. Bring what you can. The supply listing has snack ideas, but you don’t need to buy anything.')],
         prompt: 'What is useful for the rest of your day?',
-        choices: [c('attend', 'Open supplies and RSVP', 'View a simulated shop listing; tell Maya you’re coming.'), c('reminder', 'Set a local reminder', 'Keep the time handy without opening the shop.'), c('quiet', 'Keep the evening offline', 'Use the details you already have; no new shop visit.')],
+        choices: [c('attend', 'Open supplies and RSVP', 'View a simulated shop listing; tell Jasmine you’re coming.'), c('reminder', 'Set a local reminder', 'Keep the time handy without opening the shop.'), c('quiet', 'Keep the evening offline', 'Use the details you already have; no new shop visit.')],
         connectionKey: 'monitoring', researchKey: 'settings' })
     ];
     return scenes[state.step]();
@@ -118,21 +118,21 @@
         next.account = id !== 'outside'; next.contactsSynced = id === 'sync'; next.flags.join = id;
         if (next.account) next.explicitData.push(entry('account', playerName + '’s basic profile', playerName + ', age 16, student; membership in the class fundraiser group. These are fictional signup details.'));
         if (id === 'sync') {
-          next.explicitData.push(entry('contacts', 'Contact matching', 'The story’s fictional address-book entries for Maya and Eli were shared with Instagram.'));
-          outcome('Your people appear.', 'Instagram finds Maya and Eli immediately. The group plan and playlist vote are one tap away. The shortcut also places the fictional contact list in Instagram’s record. That exchange feels small because the benefit arrives first.', 'Maya: Found you! The plan is pinned.');
+          next.explicitData.push(entry('contacts', 'Contact matching', 'The story’s fictional address-book entries for Jasmine and Hannah were shared with Instagram.'));
+          outcome('Your people appear.', 'Instagram finds Jasmine and Hannah immediately. The group plan and playlist vote are one tap away. The shortcut also places the fictional contact list in Instagram’s record. That exchange feels small because the benefit arrives first.', 'Jasmine: Found you! The plan is pinned.');
         } else if (id === 'manual') {
-          next.privacyChoices.push(entry('no-contacts', 'Contacts not uploaded', 'You joined by manually finding Maya and Eli. The address book was not shared.'));
-          outcome('One extra search.', 'You find Maya and Eli by name, then open the same group plan. Contact matching would have saved a step, but declining it has not removed the conversation. Your basic profile exists; the address book stays out.', 'Eli: You’re in. Vote whenever you want.');
+          next.privacyChoices.push(entry('no-contacts', 'Contacts not uploaded', 'You joined by manually finding Jasmine and Hannah. The address book was not shared.'));
+          outcome('One extra search.', 'You find Jasmine and Hannah by name, then open the same group plan. Contact matching would have saved a step, but declining it has not removed the conversation. Your basic profile exists; the address book stays out.', 'Hannah: You’re in. Vote whenever you want.');
         } else {
-          next.privacyChoices.push(entry('outside', 'No Instagram account', 'Maya relays plans by text. Preview responses do not upload an account profile.'));
-          next.socialChoices.push(entry('relay', 'Maya’s text relay', 'You still receive invitations, although Maya must forward updates and you cannot vote directly in Instagram.'));
-          outcome('A different route in.', 'Maya agrees to text important changes. You remain invited, though the live playlist vote is less convenient to follow. Public previews can show you the conversation without creating an account or attaching a profile to your browsing.', 'Maya: I’ll send the final time. You’re still coming, right?');
+          next.privacyChoices.push(entry('outside', 'No Instagram account', 'Jasmine relays plans by text. Preview responses do not upload an account profile.'));
+          next.socialChoices.push(entry('relay', 'Jasmine’s text relay', 'You still receive invitations, although Jasmine must forward updates and you cannot vote directly in Instagram.'));
+          outcome('A different route in.', 'Jasmine agrees to text important changes. You remain invited, though the live playlist vote is less convenient to follow. Public previews can show you the conversation without creating an account or attaching a profile to your browsing.', 'Jasmine: I’ll send the final time. You’re still coming, right?');
         }
         break;
       case 'personalize':
         next.permissions.partnerActivity = id === 'allow' && next.account === true;
         next.privacyChoices.push(entry('partner-choice', next.permissions.partnerActivity ? 'Optional partner use allowed' : 'Optional partner use declined', next.permissions.partnerActivity ? 'Future simulated partner-shop visits may be associated with ' + playerName + '’s account for related ads.' : 'Future partner visits remain unassociated unless this option is later enabled. This is a simplified rule in the simulation.'));
-        outcome(next.permissions.partnerActivity ? 'A useful shortcut, with a link.' : 'The choice takes effect.', next.permissions.partnerActivity ? 'Future participating-shop visits can help Instagram select relevant ads. You did not need this permission to message friends. A convenient suggestion may now carry information from a different app into the same account.' : outside ? 'The preview stays unlinked. No account or partner permission has been created. Maya’s messages still get through by text; you have accepted some extra coordination rather than an automatic signup.' : 'Optional partner association stays off. Messaging still works, and likes or saves inside Instagram can still shape recommendations. The boundary is specific: it limits this extra connection, not every kind of activity the app can observe.');
+        outcome(next.permissions.partnerActivity ? 'A useful shortcut, with a link.' : 'The choice takes effect.', next.permissions.partnerActivity ? 'Future participating-shop visits can help Instagram select relevant ads. You did not need this permission to message friends. A convenient suggestion may now carry information from a different app into the same account.' : outside ? 'The preview stays unlinked. No account or partner permission has been created. Jasmine’s messages still get through by text; you have accepted some extra coordination rather than an automatic signup.' : 'Optional partner association stays off. Messaging still works, and likes or saves inside Instagram can still shape recommendations. The boundary is specific: it limits this extra connection, not every kind of activity the app can observe.');
         break;
       case 'activity': {
         const actions = payload.actions;
@@ -146,7 +146,7 @@
           }
         });
         if (!next.inferredInterests.length) next.feedChanges.push(entry('general-feed', 'A general event feed', outside ? 'The unlinked preview stays general. No account interests were inferred from its local responses.' : 'You skipped all three cards. No interest tags were added; the feed keeps its general mix.'));
-        outcome(next.inferredInterests.length ? 'A guess takes shape.' : 'No new interest guesses.', next.inferredInterests.length ? 'Similar posts move forward in your feed. They may be useful, but the categories remain guesses: saving a poster could mean helping Maya, not loving art. A profile can grow from ordinary actions without you ever typing an interest list.' : outside ? 'You explored the preview without sending those responses to a Instagram account. Its general feed remains unchanged. The simulation remembers your choices only so you can review this day.' : 'Skipping the cards adds no interest categories in this simulation. Instagram still offers a general feed. Choosing less did not block the event plan or require you to invent preferences.');
+        outcome(next.inferredInterests.length ? 'A guess takes shape.' : 'No new interest guesses.', next.inferredInterests.length ? 'Similar posts move forward in your feed. They may be useful, but the categories remain guesses: saving a poster could mean helping Jasmine, not loving art. A profile can grow from ordinary actions without you ever typing an interest list.' : outside ? 'You explored the preview without sending those responses to a Instagram account. Its general feed remains unchanged. The simulation remembers your choices only so you can review this day.' : 'Skipping the cards adds no interest categories in this simulation. Instagram still offers a general feed. Choosing less did not block the event plan or require you to invent preferences.');
         next.flags.actions = copy(actions);
         break;
       }
@@ -161,19 +161,19 @@
         const audience = id === 'close' ? 'close' : 'friends';
         if (id === 'close') next.audience = 'close';
         const text = id === 'revise' ? REVISION : DRAFT;
-        const channel = outside ? 'Maya’s text relay' : 'Instagram';
+        const channel = outside ? 'Jasmine’s text relay' : 'Instagram';
         const labels = { publish: 'Original opinion shared', close: 'Original opinion limited', revise: 'Opinion revised before sharing', withhold: 'Opinion withheld' };
         const details = {
-          publish: outside ? 'With your permission, Maya relayed the exact draft to the class group. No account for ' + playerName + ' was created.' : 'The exact draft went to your friends list, including classmates and family.',
-          close: outside ? 'The original wording stayed in texts with Maya and Eli; Maya was asked not to relay it to the class group.' : 'The original wording went only to Maya and Eli. This limits initial recipients, not possible screenshots.',
-          revise: 'You replaced “' + DRAFT + '” with “' + REVISION + '” before ' + (outside ? 'asking Maya to relay it to the class group.' : 'sharing with friends, classmates, and family.'),
+          publish: outside ? 'With your permission, Jasmine relayed the exact draft to the class group. No account for ' + playerName + ' was created.' : 'The exact draft went to your friends list, including classmates and family.',
+          close: outside ? 'The original wording stayed in texts with Jasmine and Hannah; Jasmine was asked not to relay it to the class group.' : 'The original wording went only to Jasmine and Hannah. This limits initial recipients, not possible screenshots.',
+          revise: 'You replaced “' + DRAFT + '” with “' + REVISION + '” before ' + (outside ? 'asking Jasmine to relay it to the class group.' : 'sharing with friends, classmates, and family.'),
           withhold: 'The draft was neither sent nor published. This private decision is only in your local playthrough record.'
         };
         next.postingDecisions.push(entry('fundraiser-opinion', labels[id], details[id], { action: id, original: DRAFT, text: id === 'withhold' ? null : text, audience: id === 'withhold' ? 'none' : audience, channel: id === 'withhold' ? 'local draft' : channel, published: id !== 'withhold' }));
-        if (id === 'close') next.privacyChoices.push(entry('post-audience', 'A smaller initial audience', 'You kept the draft’s words but limited its recipients to Maya and Eli.'));
+        if (id === 'close') next.privacyChoices.push(entry('post-audience', 'A smaller initial audience', 'You kept the draft’s words but limited its recipients to Jasmine and Hannah.'));
         const response = {
-          publish: 'Your opinion reaches the wider group. Maya agrees; an organizer asks whether you are criticizing their effort. The same sentence can mean different things to different readers. In this simulation, expressing this opinion does not change your ads.',
-          close: 'Maya and Eli receive the original words. You get a useful conversation without addressing the whole group. The organizers do not receive this post directly, though nobody can promise it will never be repeated.',
+          publish: 'Your opinion reaches the wider group. Jasmine agrees; an organizer asks whether you are criticizing their effort. The same sentence can mean different things to different readers. In this simulation, expressing this opinion does not change your ads.',
+          close: 'Jasmine and Hannah receive the original words. You get a useful conversation without addressing the whole group. The organizers do not receive this post directly, though nobody can promise it will never be repeated.',
           revise: 'The gentler question gets a practical reply about cheaper options. It also removes some of the frustration you wanted to express. Anticipating an audience has changed your wording without any platform penalty or instruction to do so.',
           withhold: 'Nothing is posted, and no audience sees the draft. You avoid an awkward exchange, but the opinion does not enter the discussion. This is a choice shaped by expected reactions, not evidence that an ad system punished disagreement.'
         };
@@ -183,17 +183,17 @@
       case 'thread': {
         next.flags.thread = id;
         const rows = {
-          pile_on: ['Criticism amplified', outside ? 'You repeated the assumption to Maya by text. You did not post in Instagram.' : 'You added agreement to the public criticism of Eli before asking for context.'],
-          context: ['Context requested', outside ? 'Maya relayed your request for context. Eli explained that he meant cost, not anyone’s effort.' : 'You asked what Eli meant. He explained that he meant cost, not anyone’s effort.'],
-          private: ['Private support for Eli', 'You checked in privately. Eli felt heard, but your message did not correct the public thread.'],
+          pile_on: ['Criticism amplified', outside ? 'You repeated the assumption to Jasmine by text. You did not post in Instagram.' : 'You added agreement to the public criticism of Hannah before asking for context.'],
+          context: ['Context requested', outside ? 'Jasmine relayed your request for context. Hannah explained that she meant cost, not anyone’s effort.' : 'You asked what Hannah meant. She explained that she meant cost, not anyone’s effort.'],
+          private: ['Private support for Hannah', 'You checked in privately. Hannah felt heard, but your message did not correct the public thread.'],
           disengage: ['Attention protected', 'You left the thread without adding a reaction. The disagreement continued without your participation.']
         };
         next.socialChoices.push(entry('thread-response', rows[id][0], rows[id][1], { action: id }));
         const responses = {
-          pile_on: 'Agreement arrives quickly. Later, Eli explains that he meant the dress-code cost, not the organizers’ work. You helped a confident interpretation travel before it was checked. The consequence is social; no ad preference or permission changes.',
-          context: 'Eli explains that he was worried about affordability, not dismissing anyone’s work. Some replies soften; others remain defensive. Asking slowed the rush to judge without guaranteeing agreement. Your advertising settings and inferred interests stay unchanged.',
-          private: 'Eli thanks you for checking in. He was worried about costs and now feels less alone. The group thread still contains its assumptions because your support was private. You gained connection without resolving the public misunderstanding.',
-          disengage: 'You stop reading and return to your afternoon. That protects your attention, while leaving Eli’s explanation and the group’s assumptions unresolved. You do not owe every thread a response; disengagement still has consequences for what you hear next.'
+          pile_on: 'Agreement arrives quickly. Later, Hannah explains that she meant the dress-code cost, not the organizers’ work. You helped a confident interpretation travel before it was checked. The consequence is social; no ad preference or permission changes.',
+          context: 'Hannah explains that she was worried about affordability, not dismissing anyone’s work. Some replies soften; others remain defensive. Asking slowed the rush to judge without guaranteeing agreement. Your advertising settings and inferred interests stay unchanged.',
+          private: 'Hannah thanks you for checking in. She was worried about costs and now feels less alone. The group thread still contains its assumptions because your support was private. You gained connection without resolving the public misunderstanding.',
+          disengage: 'You stop reading and return to your afternoon. That protects your attention, while leaving Hannah’s explanation and the group’s assumptions unresolved. You do not owe every thread a response; disengagement still has consequences for what you hear next.'
         };
         outcome(rows[id][0] + '.', responses[id]);
         break;
@@ -202,11 +202,11 @@
         next.flags.settings = id;
         if (id === 'reduce') {
           next.permissions.partnerActivity = false; next.audience = 'close'; next.flags.reducedAtStep = state.step;
-          next.privacyChoices.push(entry('reduced-sharing', outside ? 'Close text relay retained' : 'Future optional association stopped', outside ? 'No account was created. Maya is asked to check before forwarding beyond the close circle.' : 'Later partner visits will not be associated in this simulation. The next post defaults to close friends; old records and earlier post audiences remain unchanged.', { step: state.step }));
-          outcome('The boundary applies from here.', outside ? 'You still have no Instagram profile. Maya agrees to check before forwarding future texts beyond your close circle. Previous messages cannot be unsent, but the next conversation has a clearer boundary.' : 'Optional partner association is now off, and the next post defaults to close friends. Earlier likes, uploads, or permitted shop visits remain in the record. The next shop visit will test this new boundary; changing a setting is not the same as deleting history.');
+          next.privacyChoices.push(entry('reduced-sharing', outside ? 'Close text relay retained' : 'Future optional association stopped', outside ? 'No account was created. Jasmine is asked to check before forwarding beyond the close circle.' : 'Later partner visits will not be associated in this simulation. The next post defaults to close friends; old records and earlier post audiences remain unchanged.', { step: state.step }));
+          outcome('The boundary applies from here.', outside ? 'You still have no Instagram profile. Jasmine agrees to check before forwarding future texts beyond your close circle. Previous messages cannot be unsent, but the next conversation has a clearer boundary.' : 'Optional partner association is now off, and the next post defaults to close friends. Earlier likes, uploads, or permitted shop visits remain in the record. The next shop visit will test this new boundary; changing a setting is not the same as deleting history.');
         } else {
           next.privacyChoices.push(entry('settings-kept', 'Existing settings retained', 'Partner activity remains ' + (next.permissions.partnerActivity ? 'on' : 'off') + '. No earlier choice was silently reversed.'));
-          outcome('Your existing choices stay.', outside ? 'You keep the text relay and unlinked preview. No account or new permission appears. Staying connected through Maya is workable, although it asks a friend to keep carrying updates.' : next.permissions.partnerActivity ? 'You keep optional partner use on because relevant suggestions have value for you. Future partner visits can still be connected. This preserves a convenience and its data trade-off; it does not mean every part of your day is visible.' : 'Optional partner use was already off, and it stays off. You keep the current audience choice. Reviewing a setting does not require switching it on or sacrificing the group conversation.');
+          outcome('Your existing choices stay.', outside ? 'You keep the text relay and unlinked preview. No account or new permission appears. Staying connected through Jasmine is workable, although it asks a friend to keep carrying updates.' : next.permissions.partnerActivity ? 'You keep optional partner use on because relevant suggestions have value for you. Future partner visits can still be connected. This preserves a convenience and its data trade-off; it does not mean every part of your day is visible.' : 'Optional partner use was already off, and it stays off. You keep the current audience choice. Reviewing a setting does not require switching it on or sacrificing the group conversation.');
         }
         break;
       }
@@ -214,11 +214,11 @@
         next.flags.evening = id;
         const linked = id === 'attend' ? addAd(next, 'supplies', 'event-supplies', true, state.step) : false;
         if (id === 'attend') {
-          next.socialChoices.push(entry('evening-plan', 'Coming to the fundraiser', outside ? 'You RSVP through Maya’s text relay and view the simulated supply listing. No Instagram account is created.' : 'You RSVP to Maya and view the simulated supply listing.'));
-          outcome('Plans made. A boundary tested.', linked ? 'You tell Maya you are coming. The supply-shop visit produces a related ad because optional partner use is still on. The same account made planning easier and connected another piece of activity from outside Instagram.' : 'You tell Maya you are coming and view the supply listing. That new visit is not associated with a Instagram account. A general ad still appears. You keep the useful event information without giving this extra activity the same route into a profile.', 'Maya: Great. Bring yourself; buying something is optional.');
+          next.socialChoices.push(entry('evening-plan', 'Coming to the fundraiser', outside ? 'You RSVP through Jasmine’s text relay and view the simulated supply listing. No Instagram account is created.' : 'You RSVP to Jasmine and view the simulated supply listing.'));
+          outcome('Plans made. A boundary tested.', linked ? 'You tell Jasmine you are coming. The supply-shop visit produces a related ad because optional partner use is still on. The same account made planning easier and connected another piece of activity from outside Instagram.' : 'You tell Jasmine you are coming and view the supply listing. That new visit is not associated with a Instagram account. A general ad still appears. You keep the useful event information without giving this extra activity the same route into a profile.', 'Jasmine: Great. Bring yourself; buying something is optional.');
         } else if (id === 'reminder') {
           next.socialChoices.push(entry('evening-plan', 'A local reminder', 'You keep the 4:30 courtyard plan in a simulated local reminder. No shop page is opened or linked.'));
-          outcome('The useful part stays.', 'A local reminder keeps the time and place handy. No supply-shop page opens, so no new partner event exists to associate. The convenience you needed was remembering a plan, not necessarily adding another activity to a platform profile.', outside ? 'Maya’s text: Same courtyard, 4:30. See you if you can make it.' : 'Maya: Same courtyard, 4:30. See you if you can make it.');
+          outcome('The useful part stays.', 'A local reminder keeps the time and place handy. No supply-shop page opens, so no new partner event exists to associate. The convenience you needed was remembering a plan, not necessarily adding another activity to a platform profile.', outside ? 'Jasmine’s text: Same courtyard, 4:30. See you if you can make it.' : 'Jasmine: Same courtyard, 4:30. See you if you can make it.');
         } else {
           next.socialChoices.push(entry('evening-plan', 'An offline evening', 'You keep the event details already received and stop browsing. No additional shop visit is made.'));
           outcome('Enough information for now.', 'You close the preview with the time and place already noted. No new shop visit occurs. You can still turn up, although you will not follow every live update. The invitation survives the boundary you put around the rest of your attention.');
